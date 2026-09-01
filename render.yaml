@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: unek-tchad-officiel
+    env: docker
+    plan: free
+    region: frankfurt
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+      - key: APP_KEY
+        value: base64:Y3lvd1B2ZHd1WGNFakxQdHprOGl2VG1kMmdsMWN3VmM=
+      - key: DB_CONNECTION
+        value: sqlite
