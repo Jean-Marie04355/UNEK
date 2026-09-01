@@ -24,6 +24,14 @@ ENV APACHE_DOCUMENT_ROOT /var/www/html/public
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/000-default.conf
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf || true
 
+# Configuration Apache pour autoriser la lecture dans public/storage (FollowSymLinks)
+RUN echo "<Directory /var/www/html/public>\n\
+    Options Indexes FollowSymLinks\n\
+    AllowOverride All\n\
+    Require all granted\n\
+</Directory>" > /etc/apache2/conf-available/laravel.conf \
+    && a2enconf laravel
+
 # Installation de Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
@@ -41,9 +49,9 @@ RUN composer install --no-dev --optimize-autoloader --ignore-platform-reqs
 RUN npm install && npm run build
 
 # Création des dossiers de cache & storage avec permissions totales
-RUN mkdir -p /var/www/html/storage/framework/views /var/www/html/storage/framework/sessions /var/www/html/storage/framework/cache /var/www/html/bootstrap/cache
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database /var/www/html/public/build
-RUN chmod -R 777 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database /var/www/html/public/build
+RUN mkdir -p /var/www/html/storage/framework/views /var/www/html/storage/framework/sessions /var/www/html/storage/framework/cache /var/www/html/bootstrap/cache /var/www/html/storage/app/public
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database /var/www/html/public
+RUN chmod -R 777 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database /var/www/html/public
 
 # Création de la BDD SQLite
 RUN touch /var/www/html/database/database.sqlite \
@@ -55,4 +63,4 @@ RUN php artisan key:generate --force
 
 EXPOSE 80
 
-CMD ["sh", "-c", "php artisan migrate --force && php artisan db:seed --class=CandidatureSeeder --force && apache2-foreground"]
+CMD ["sh", "-c", "php artisan storage:link --force && php artisan migrate --force && php artisan db:seed --class=CandidatureSeeder --force && apache2-foreground"]
