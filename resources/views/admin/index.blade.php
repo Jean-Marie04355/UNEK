@@ -345,9 +345,9 @@
                                             <!-- Actions -->
                                             <td class="py-4 px-4 text-right">
                                                 <div class="flex items-center justify-end gap-1.5">
-                                                    <!-- WhatsApp Relance 1 Clic -->
-                                                    <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $cand->telephone) }}?text={{ urlencode("Bonjour {$cand->prenom}, la Scolarité de l'Université Emi Koussi (UNEK) vous informe que votre dossier N° {$cand->code_dossier} est actuellement : " . strtoupper($cand->statut) . ". Remarques : " . ($cand->remarques_admin ?? 'Dossier en cours d\'examen.')) }}" target="_blank" class="p-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 transition" title="Relance WhatsApp 1-Clic">
-                                                        <i class="fa-brands fa-whatsapp text-sm"></i>
+                                                    <!-- Email Notification 1-Clic -->
+                                                    <a :href="'mailto:' + cand.email + '?subject=' + encodeURIComponent('[UNEK] Décision concernant votre candidature N° ' + cand.code_dossier) + '&body=' + encodeURIComponent('Bonjour ' + cand.prenom + ' ' + cand.nom + ',\n\nLa Scolarité de l\'Université Emi Koussi (UNEK) vous informe que votre dossier N° ' + cand.code_dossier + ' pour la formation ' + cand.filiere + ' est actuellement : ' + cand.statut.toUpperCase() + '.\n\nRemarques de la commission : ' + (cand.remarques_admin || 'Votre dossier est en cours de traitement.') + '\n\nPour suivre votre attestation d\'admission avec QR Code, rendez-vous sur : https://unek.onrender.com/admissions/suivi\n\nCordialement,\nLa Direction de la Scolarité — UNEK N\'Djamena.')" class="p-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 transition" title="Envoyer Notification Email en 1-Clic">
+                                                        <i class="fa-solid fa-envelope text-sm text-amber-600"></i>
                                                     </a>
 
                                                     <button @click="inspectCandidate({{ json_encode($cand) }})" class="px-3.5 py-1.5 rounded-xl bg-amber-400 hover:bg-amber-500 text-slate-950 font-extrabold text-xs transition flex items-center gap-1.5 shadow-sm">
