@@ -43,8 +43,8 @@ COPY . .
 # Fichier .env pour la production avec clé générée
 RUN cp .env.example .env
 
-# Installation des dépendances Composer
-RUN composer install --no-dev --optimize-autoloader --ignore-platform-reqs
+# Installation des dépendances Composer avec tentative de secours en cas de timeout réseau GitHub
+RUN composer install --no-dev --optimize-autoloader --ignore-platform-reqs || (sleep 3 && composer install --no-dev --optimize-autoloader --ignore-platform-reqs)
 
 # Installation & compilation des assets Vite/Tailwind
 RUN npm install && npm run build
@@ -54,7 +54,7 @@ RUN mkdir -p /var/www/html/storage/framework/views /var/www/html/storage/framewo
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database /var/www/html/public
 RUN chmod -R 777 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database /var/www/html/public
 
-# Création de la BDD SQLite par défaut
+# Création de la BDD SQLite par défaut si PostgreSQL n'est pas utilisé
 RUN touch /var/www/html/database/database.sqlite \
     && chown www-data:www-data /var/www/html/database/database.sqlite \
     && chmod 777 /var/www/html/database/database.sqlite
