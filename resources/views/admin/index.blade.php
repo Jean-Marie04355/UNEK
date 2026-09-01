@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Scolarité & Admissions | UNEK N'Djamena</title>
+    <title>Espace Scolarité & Dashboard Admin | Université Emi Koussi (UNEK)</title>
     
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
     <!-- Tailwind CSS CDN Fallback -->
@@ -32,16 +32,16 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="h-full font-['Plus_Jakarta_Sans'] bg-slate-100 text-slate-800 antialiased" x-data="{
-    sidebarOpen: false,
+    mainTab: 'candidatures',
     drawerOpen: false,
     docPreviewModalOpen: false,
     previewingDoc: null,
-    activeTab: 'info',
+    drawerTab: 'info',
     selectedCandidate: null,
     
     inspectCandidate(cand) {
         this.selectedCandidate = cand;
-        this.activeTab = 'info';
+        this.drawerTab = 'info';
         this.drawerOpen = true;
     }
 }">
@@ -49,54 +49,63 @@
     <div class="min-h-full flex flex-col lg:flex-row">
         
         <!-- SIDEBAR NAVIGATION -->
-        <aside class="w-full lg:w-64 bg-[#0B1528] text-slate-300 shrink-0 border-r border-slate-800 flex flex-col justify-between">
+        <aside class="w-full lg:w-64 bg-[#09101E] text-slate-300 shrink-0 border-r border-slate-800/80 flex flex-col justify-between shadow-2xl">
             <div>
                 <!-- Brand Header -->
-                <div class="h-20 flex items-center px-6 border-b border-slate-800 gap-3">
-                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 text-slate-950 font-black flex items-center justify-center text-xl shadow-lg ring-2 ring-amber-400/20">
+                <div class="h-20 flex items-center px-6 border-b border-slate-800/80 gap-3.5 bg-slate-950/40">
+                    <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-amber-400 via-amber-500 to-amber-600 text-slate-950 font-black flex items-center justify-center text-xl shadow-lg ring-2 ring-amber-400/20">
                         <i class="fa-solid fa-graduation-cap"></i>
                     </div>
                     <div>
                         <div class="font-['Outfit'] font-extrabold text-lg text-white tracking-tight flex items-center gap-1.5">
-                            UNEK <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-amber-400/20 text-amber-300 border border-amber-400/30">ADMIN</span>
+                            UNEK <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-amber-400/20 text-amber-300 border border-amber-400/30">PRO</span>
                         </div>
-                        <p class="text-[10px] text-slate-400 font-medium">Espace Scolarité LMD</p>
+                        <p class="text-[10px] text-slate-400 font-medium">Espace Scolarité & Direction</p>
                     </div>
                 </div>
 
                 <!-- Navigation Links -->
                 <nav class="p-4 space-y-1.5 text-xs font-semibold">
-                    <div class="px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-slate-500">Menu Principal</div>
+                    <div class="px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-slate-500">Navigation Principale</div>
                     
-                    <a href="{{ route('admin.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-amber-400/10 text-amber-300 font-extrabold border border-amber-400/20">
-                        <i class="fa-solid fa-chart-pie text-sm"></i> Dashboard & Admissions
+                    <button @click="mainTab = 'candidatures'" class="w-full flex items-center justify-between px-3.5 py-3 rounded-xl transition font-bold" :class="mainTab === 'candidatures' ? 'bg-amber-400/10 text-amber-300 border border-amber-400/20 shadow-sm' : 'text-slate-400 hover:bg-slate-800/60 hover:text-white'">
+                        <span class="flex items-center gap-3"><i class="fa-solid fa-users-rectangle text-base"></i> Candidatures</span>
+                        <span class="px-2 py-0.5 rounded-full bg-amber-400 text-slate-950 font-black text-[10px]">{{ $stats['total'] }}</span>
+                    </button>
+
+                    <button @click="mainTab = 'analytics'" class="w-full flex items-center gap-3 px-3.5 py-3 rounded-xl transition font-bold" :class="mainTab === 'analytics' ? 'bg-amber-400/10 text-amber-300 border border-amber-400/20 shadow-sm' : 'text-slate-400 hover:bg-slate-800/60 hover:text-white'">
+                        <i class="fa-solid fa-chart-line text-base text-sky-400"></i> Analytiques & Stats
+                    </button>
+
+                    <a href="{{ route('admin.pv') }}" target="_blank" class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-slate-400 hover:bg-slate-800/60 hover:text-white transition font-bold">
+                        <i class="fa-solid fa-file-pdf text-base text-rose-400"></i> Procès-Verbal (PV)
                     </a>
 
-                    <a href="{{ route('formations') }}" target="_blank" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800/80 hover:text-white transition">
-                        <i class="fa-solid fa-book-bookmark text-sm"></i> Catalogue Filières (35)
+                    <a href="{{ route('admin.export.csv') }}" class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-slate-400 hover:bg-slate-800/60 hover:text-white transition font-bold">
+                        <i class="fa-solid fa-file-excel text-base text-emerald-400"></i> Exporter Listing (CSV)
                     </a>
 
-                    <a href="{{ route('admissions') }}" target="_blank" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800/80 hover:text-white transition">
-                        <i class="fa-solid fa-pen-to-square text-sm"></i> Formulaire Candidat
+                    <div class="pt-4 px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-slate-500">Portail Public</div>
+
+                    <a href="{{ route('formations') }}" target="_blank" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800/60 hover:text-white transition">
+                        <i class="fa-solid fa-book-open text-sm"></i> Catalogue Filières (35)
                     </a>
 
-                    <div class="pt-4 px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-slate-500">Gestion Académique</div>
-
-                    <a href="#" onclick="window.print()" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800/80 hover:text-white transition">
-                        <i class="fa-solid fa-file-pdf text-sm text-rose-400"></i> Exporter Procès-Verbal (PV)
+                    <a href="{{ route('admissions') }}" target="_blank" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800/60 hover:text-white transition">
+                        <i class="fa-solid fa-user-plus text-sm text-amber-400"></i> Portail d'Inscription
                     </a>
 
-                    <a href="{{ route('home') }}" target="_blank" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800/80 hover:text-white transition">
-                        <i class="fa-solid fa-globe text-sm text-sky-400"></i> Voir le Portail Public
+                    <a href="{{ route('home') }}" target="_blank" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-400 hover:bg-slate-800/60 hover:text-white transition">
+                        <i class="fa-solid fa-globe text-sm"></i> Voir le Site
                     </a>
                 </nav>
             </div>
 
             <!-- Sidebar User Profile -->
-            <div class="p-4 border-t border-slate-800 bg-slate-950/40">
+            <div class="p-4 border-t border-slate-800/80 bg-slate-950/60">
                 <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-2.5">
-                        <div class="w-8 h-8 rounded-full bg-slate-700 text-white font-bold flex items-center justify-center text-xs ring-2 ring-amber-400">
+                    <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-slate-700 to-slate-800 text-white font-bold flex items-center justify-center text-xs ring-2 ring-amber-400/50 shadow-md">
                             DA
                         </div>
                         <div>
@@ -104,34 +113,44 @@
                             <div class="text-[10px] text-slate-400">N'Djamena, Tchad</div>
                         </div>
                     </div>
-                    <span class="w-2 h-2 rounded-full bg-emerald-500 ring-4 ring-emerald-500/20" title="Système En Ligne"></span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 ring-4 ring-emerald-500/20 animate-pulse" title="Système En Ligne"></span>
                 </div>
             </div>
         </aside>
 
         <!-- MAIN CONTENT AREA -->
-        <main class="flex-1 flex flex-col min-w-0">
+        <main class="flex-1 flex flex-col min-w-0 bg-slate-100">
             
-            <!-- TOP BAR -->
-            <header class="bg-white border-b border-slate-200 px-6 py-4 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-sm">
-                <div>
-                    <h1 class="font-['Outfit'] font-extrabold text-xl text-slate-900">Tableau de Bord des Admissions 2026-2027</h1>
-                    <p class="text-xs text-slate-500">Gestion des candidatures, examen des dossiers et validation des diplômes</p>
+            <!-- TOP EXECUTIVE HEADER -->
+            <header class="bg-white border-b border-slate-200 px-6 py-4 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-sm sticky top-0 z-20">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-2xl bg-[#09101E] text-amber-400 flex items-center justify-center text-2xl shadow-lg">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <h1 class="font-['Outfit'] font-black text-xl text-slate-900">Espace Administration & Scolarité LMD</h1>
+                            <span class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-extrabold text-[10px] border border-emerald-200">
+                                Session 2026-2027
+                            </span>
+                        </div>
+                        <p class="text-xs text-slate-500">Gestion centrale des étudiants, examen des pièces et délibération du jury</p>
+                    </div>
                 </div>
 
                 <div class="flex flex-wrap items-center gap-2.5 text-xs">
                     <!-- Export CSV -->
-                    <a href="{{ route('admin.export.csv') }}" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold transition flex items-center gap-1.5 shadow-sm">
+                    <a href="{{ route('admin.export.csv') }}" class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold shadow-md hover:shadow-lg transition flex items-center gap-2">
                         <i class="fa-solid fa-file-excel"></i> Exporter Listing (CSV)
                     </a>
 
                     <!-- PV Délibération -->
-                    <a href="{{ route('admin.pv') }}" target="_blank" class="px-3.5 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold transition flex items-center gap-1.5 shadow-sm">
+                    <a href="{{ route('admin.pv') }}" target="_blank" class="px-4 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-extrabold shadow-md hover:shadow-lg transition flex items-center gap-2">
                         <i class="fa-solid fa-file-pdf"></i> PV Délibération (PDF)
                     </a>
 
-                    <a href="{{ route('admissions') }}" target="_blank" class="px-4 py-2 rounded-xl bg-[#0B1528] hover:bg-slate-800 text-white font-bold shadow-md transition flex items-center gap-2">
-                        <i class="fa-solid fa-user-plus text-amber-400"></i> Nouvelle Candidature
+                    <a href="{{ route('admissions') }}" target="_blank" class="px-4 py-2.5 rounded-xl bg-[#09101E] hover:bg-slate-800 text-white font-extrabold shadow-md transition flex items-center gap-2">
+                        <i class="fa-solid fa-plus text-amber-400"></i> Inscrire Candidat
                     </a>
                 </div>
             </header>
@@ -148,74 +167,74 @@
                     </div>
                 @endif
 
-                <!-- KPI METRICS GRID -->
+                <!-- EXECUTIVE KPI CARDS -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
                     
                     <!-- Total -->
-                    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden">
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden group hover:shadow-md transition">
                         <div class="flex justify-between items-start">
                             <div>
-                                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Total Dossiers</span>
+                                <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Total Inscrits</span>
                                 <span class="font-['Outfit'] font-black text-3xl text-slate-900 mt-1 block">{{ $stats['total'] }}</span>
                             </div>
-                            <div class="w-10 h-10 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center font-bold">
-                                <i class="fa-solid fa-folder-open text-base"></i>
+                            <div class="w-10 h-10 rounded-2xl bg-slate-100 text-slate-700 flex items-center justify-center font-bold text-lg group-hover:bg-slate-900 group-hover:text-amber-400 transition">
+                                <i class="fa-solid fa-folder-open"></i>
                             </div>
                         </div>
-                        <div class="mt-3 text-[11px] font-semibold text-slate-500">Inscriptions enregistrées</div>
+                        <div class="mt-3 text-[11px] font-semibold text-slate-500">Candidatures en base</div>
                     </div>
 
                     <!-- En attente -->
-                    <div class="bg-white p-5 rounded-2xl border border-sky-200 bg-sky-50/40 shadow-sm relative overflow-hidden">
+                    <div class="bg-white p-5 rounded-2xl border border-sky-200 bg-sky-50/30 shadow-sm relative overflow-hidden group hover:shadow-md transition">
                         <div class="flex justify-between items-start">
                             <div>
                                 <span class="text-[11px] font-bold text-sky-700 uppercase tracking-wider block">En Attente</span>
                                 <span class="font-['Outfit'] font-black text-3xl text-sky-900 mt-1 block">{{ $stats['en_attente'] }}</span>
                             </div>
-                            <div class="w-10 h-10 rounded-xl bg-sky-500 text-white flex items-center justify-center font-bold shadow-md shadow-sky-500/20">
-                                <i class="fa-solid fa-hourglass-half text-base"></i>
+                            <div class="w-10 h-10 rounded-2xl bg-sky-500 text-white flex items-center justify-center font-bold text-lg shadow-md shadow-sky-500/20">
+                                <i class="fa-solid fa-hourglass-half"></i>
                             </div>
                         </div>
                         <div class="mt-3 text-[11px] font-semibold text-sky-700">À étudier par la scolarité</div>
                     </div>
 
                     <!-- Admis -->
-                    <div class="bg-white p-5 rounded-2xl border border-emerald-200 bg-emerald-50/40 shadow-sm relative overflow-hidden">
+                    <div class="bg-white p-5 rounded-2xl border border-emerald-200 bg-emerald-50/30 shadow-sm relative overflow-hidden group hover:shadow-md transition">
                         <div class="flex justify-between items-start">
                             <div>
                                 <span class="text-[11px] font-bold text-emerald-700 uppercase tracking-wider block">Admis Validés</span>
                                 <span class="font-['Outfit'] font-black text-3xl text-emerald-900 mt-1 block">{{ $stats['admis'] }}</span>
                             </div>
-                            <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold shadow-md shadow-emerald-600/20">
-                                <i class="fa-solid fa-check-double text-base"></i>
+                            <div class="w-10 h-10 rounded-2xl bg-emerald-600 text-white flex items-center justify-center font-bold text-lg shadow-md shadow-emerald-600/20">
+                                <i class="fa-solid fa-circle-check"></i>
                             </div>
                         </div>
-                        <div class="mt-3 text-[11px] font-semibold text-emerald-700">Attestation QR générée</div>
+                        <div class="mt-3 text-[11px] font-semibold text-emerald-700">Attestation QR disponible</div>
                     </div>
 
                     <!-- Incomplets -->
-                    <div class="bg-white p-5 rounded-2xl border border-amber-200 bg-amber-50/40 shadow-sm relative overflow-hidden">
+                    <div class="bg-white p-5 rounded-2xl border border-amber-200 bg-amber-50/30 shadow-sm relative overflow-hidden group hover:shadow-md transition">
                         <div class="flex justify-between items-start">
                             <div>
                                 <span class="text-[11px] font-bold text-amber-700 uppercase tracking-wider block">Incomplets</span>
                                 <span class="font-['Outfit'] font-black text-3xl text-amber-900 mt-1 block">{{ $stats['incomplet'] }}</span>
                             </div>
-                            <div class="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center font-bold shadow-md shadow-amber-500/20">
-                                <i class="fa-solid fa-triangle-exclamation text-base"></i>
+                            <div class="w-10 h-10 rounded-2xl bg-amber-500 text-white flex items-center justify-center font-bold text-lg shadow-md shadow-amber-500/20">
+                                <i class="fa-solid fa-triangle-exclamation"></i>
                             </div>
                         </div>
-                        <div class="mt-3 text-[11px] font-semibold text-amber-700">Pièce(s) demandée(s)</div>
+                        <div class="mt-3 text-[11px] font-semibold text-amber-700">Relance requise</div>
                     </div>
 
                     <!-- Refusés -->
-                    <div class="bg-white p-5 rounded-2xl border border-rose-200 bg-rose-50/40 shadow-sm relative overflow-hidden">
+                    <div class="bg-white p-5 rounded-2xl border border-rose-200 bg-rose-50/30 shadow-sm relative overflow-hidden group hover:shadow-md transition">
                         <div class="flex justify-between items-start">
                             <div>
                                 <span class="text-[11px] font-bold text-rose-700 uppercase tracking-wider block">Refusés</span>
                                 <span class="font-['Outfit'] font-black text-3xl text-rose-900 mt-1 block">{{ $stats['refuse'] }}</span>
                             </div>
-                            <div class="w-10 h-10 rounded-xl bg-rose-600 text-white flex items-center justify-center font-bold shadow-md shadow-rose-600/20">
-                                <i class="fa-solid fa-xmark text-base"></i>
+                            <div class="w-10 h-10 rounded-2xl bg-rose-600 text-white flex items-center justify-center font-bold text-lg shadow-md shadow-rose-600/20">
+                                <i class="fa-solid fa-circle-xmark"></i>
                             </div>
                         </div>
                         <div class="mt-3 text-[11px] font-semibold text-rose-700">Dossiers non retenus</div>
@@ -223,189 +242,196 @@
 
                 </div>
 
-                <!-- FILTERS & SEARCH CONTROL BAR -->
-                <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200">
-                    <form action="{{ route('admin.index') }}" method="GET" class="flex flex-col sm:flex-row gap-4 items-center justify-between text-xs">
-                        
-                        <div class="flex flex-wrap items-center gap-3 w-full sm:w-auto">
-                            <!-- Search -->
-                            <div class="relative flex-1 sm:w-72">
-                                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-400"></i>
-                                <input type="text" name="search" value="{{ request('search') }}" placeholder="Rechercher nom, n° dossier, filière..." class="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-50 border border-slate-300 focus:outline-none focus:border-amber-400 font-medium">
+                <!-- MAIN TAB 1: CANDIDATURES TABLE -->
+                <div x-show="mainTab === 'candidatures'" class="space-y-6">
+                    
+                    <!-- FILTERS & SEARCH CONTROL BAR -->
+                    <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200">
+                        <form action="{{ route('admin.index') }}" method="GET" class="flex flex-col sm:flex-row gap-4 items-center justify-between text-xs">
+                            
+                            <div class="flex flex-wrap items-center gap-3 w-full sm:w-auto">
+                                <!-- Search -->
+                                <div class="relative flex-1 sm:w-80">
+                                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-400"></i>
+                                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Rechercher nom, code dossier, téléphone..." class="w-full pl-9 pr-3 py-2.5 rounded-xl bg-slate-50 border border-slate-300 focus:outline-none focus:border-amber-400 font-medium">
+                                </div>
+
+                                <!-- Faculty Filter -->
+                                <select name="faculte" onchange="this.form.submit()" class="py-2.5 px-3 rounded-xl bg-slate-50 border border-slate-300 focus:outline-none focus:border-amber-400 font-bold">
+                                    <option value="">Toutes les Facultés</option>
+                                    <option value="Faculté des Sciences Humaines, Juridiques et de Gestion" {{ request('faculte') == 'Faculté des Sciences Humaines, Juridiques et de Gestion' ? 'selected' : '' }}>Sciences Humaines & Juridiques</option>
+                                    <option value="Faculté des Sciences et Techniques" {{ request('faculte') == 'Faculté des Sciences et Techniques' ? 'selected' : '' }}>Sciences et Techniques</option>
+                                </select>
+
+                                <!-- Status Filter -->
+                                <select name="statut" onchange="this.form.submit()" class="py-2.5 px-3 rounded-xl bg-slate-50 border border-slate-300 focus:outline-none focus:border-amber-400 font-bold">
+                                    <option value="">Tous les Statuts</option>
+                                    <option value="en_attente" {{ request('statut') == 'en_attente' ? 'selected' : '' }}>En Attente</option>
+                                    <option value="admis" {{ request('statut') == 'admis' ? 'selected' : '' }}>Admis</option>
+                                    <option value="incomplet" {{ request('statut') == 'incomplet' ? 'selected' : '' }}>Incomplet</option>
+                                    <option value="refuse" {{ request('statut') == 'refuse' ? 'selected' : '' }}>Refusé</option>
+                                </select>
                             </div>
 
-                            <!-- Faculty Filter -->
-                            <select name="faculte" onchange="this.form.submit()" class="py-2 px-3 rounded-xl bg-slate-50 border border-slate-300 focus:outline-none focus:border-amber-400 font-semibold">
-                                <option value="">Toutes les Facultés</option>
-                                <option value="Faculté des Sciences Humaines, Juridiques et de Gestion" {{ request('faculte') == 'Faculté des Sciences Humaines, Juridiques et de Gestion' ? 'selected' : '' }}>Sciences Humaines & Juridiques</option>
-                                <option value="Faculté des Sciences et Techniques" {{ request('faculte') == 'Faculté des Sciences et Techniques' ? 'selected' : '' }}>Sciences et Techniques</option>
-                            </select>
+                            <div class="flex items-center gap-2">
+                                <a href="{{ route('admin.index') }}" class="px-3.5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-extrabold transition">
+                                    Réinitialiser
+                                </a>
+                            </div>
 
-                            <!-- Status Filter -->
-                            <select name="statut" onchange="this.form.submit()" class="py-2 px-3 rounded-xl bg-slate-50 border border-slate-300 focus:outline-none focus:border-amber-400 font-semibold">
-                                <option value="">Tous les Statuts</option>
-                                <option value="en_attente" {{ request('statut') == 'en_attente' ? 'selected' : '' }}>En Attente</option>
-                                <option value="admis" {{ request('statut') == 'admis' ? 'selected' : '' }}>Admis</option>
-                                <option value="incomplet" {{ request('statut') == 'incomplet' ? 'selected' : '' }}>Incomplet</option>
-                                <option value="refuse" {{ request('statut') == 'refuse' ? 'selected' : '' }}>Refusé</option>
-                            </select>
-                        </div>
+                        </form>
+                    </div>
 
-                        <div class="flex items-center gap-2">
-                            <a href="{{ route('admin.index') }}" class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold transition">
-                                Réinitialiser
-                            </a>
-                        </div>
+                    <!-- CANDIDATES DATA TABLE -->
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse text-xs">
+                                <thead>
+                                    <tr class="bg-slate-50 border-b border-slate-200 text-slate-500 font-bold uppercase tracking-wider text-[11px]">
+                                        <th class="py-4 px-4">Code Dossier</th>
+                                        <th class="py-4 px-4">Identité Candidat</th>
+                                        <th class="py-4 px-4">Affectation Académique</th>
+                                        <th class="py-4 px-4">Date Dépôt</th>
+                                        <th class="py-4 px-4">Statut Décision</th>
+                                        <th class="py-4 px-4 text-right">Actions Exécutives</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-100 font-medium">
+                                    @forelse($candidatures as $cand)
+                                        <tr class="hover:bg-slate-50/80 transition">
+                                            <!-- Code Dossier -->
+                                            <td class="py-4 px-4">
+                                                <a href="{{ route('admissions.confirmation', $cand->code_dossier) }}" target="_blank" class="font-mono font-extrabold text-amber-600 hover:underline">
+                                                    {{ $cand->code_dossier }}
+                                                </a>
+                                            </td>
 
-                    </form>
-                </div>
+                                            <!-- Candidat -->
+                                            <td class="py-4 px-4">
+                                                <div class="font-extrabold text-slate-900 text-xs">{{ $cand->nom }} {{ $cand->prenom }}</div>
+                                                <div class="text-[11px] text-slate-500 flex items-center gap-2 mt-0.5">
+                                                    <span><i class="fa-solid fa-phone text-[10px] text-slate-400"></i> {{ $cand->telephone }}</span>
+                                                    <span>•</span>
+                                                    <span>{{ $cand->email }}</span>
+                                                </div>
+                                            </td>
 
-                <!-- ANALYTICS CARDS (GRAPHICAL DISTRIBUTION) -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    
-                    <!-- Analytics 1: Nationalités -->
-                    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-                        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-                            <h3 class="font-['Outfit'] font-bold text-sm text-slate-900 flex items-center gap-2">
-                                <i class="fa-solid fa-earth-africa text-amber-500"></i> Répartition Géographique (Nationalités)
-                            </h3>
-                            <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-600">Session 2026</span>
-                        </div>
+                                            <!-- Formation -->
+                                            <td class="py-4 px-4">
+                                                <div class="font-bold text-slate-800">{{ $cand->filiere }}</div>
+                                                <div class="text-[11px] text-slate-400 truncate max-w-xs">{{ $cand->cycle }} — {{ Str::limit($cand->faculte, 35) }}</div>
+                                            </td>
 
-                        <div class="space-y-3 text-xs">
-                            @foreach($nationaliteStats as $nat => $count)
-                                @php
-                                    $percent = $stats['total'] > 0 ? round(($count / $stats['total']) * 100) : 0;
-                                @endphp
-                                <div>
-                                    <div class="flex justify-between font-semibold mb-1">
-                                        <span class="text-slate-700">{{ $nat }}</span>
-                                        <span class="font-mono text-slate-900">{{ $count }} candidats ({{ $percent }}%)</span>
-                                    </div>
-                                    <div class="w-full h-2 rounded-full bg-slate-100 overflow-hidden">
-                                        <div class="h-full bg-gradient-to-r from-amber-400 to-amber-600 rounded-full" style="width: {{ $percent }}%"></div>
-                                    </div>
-                                </div>
-                            @endforeach
+                                            <!-- Date -->
+                                            <td class="py-4 px-4 text-slate-500">
+                                                {{ date('d/m/Y', strtotime($cand->created_at)) }}
+                                                <span class="text-[10px] text-slate-400 block">{{ date('H:i', strtotime($cand->created_at)) }}</span>
+                                            </td>
+
+                                            <!-- Statut Badge -->
+                                            <td class="py-4 px-4">
+                                                <span class="px-2.5 py-1 rounded-full font-bold text-[10px] inline-flex items-center gap-1.5
+                                                    @if($cand->statut === 'admis') bg-emerald-100 text-emerald-800 border border-emerald-200
+                                                    @elseif($cand->statut === 'incomplet') bg-amber-100 text-amber-800 border border-amber-200
+                                                    @elseif($cand->statut === 'refuse') bg-rose-100 text-rose-800 border border-rose-200
+                                                    @else bg-sky-100 text-sky-800 border border-sky-200 @endif">
+                                                    @if($cand->statut === 'admis') <i class="fa-solid fa-circle text-[6px]"></i> Admis
+                                                    @elseif($cand->statut === 'incomplet') <i class="fa-solid fa-triangle-exclamation"></i> Incomplet
+                                                    @elseif($cand->statut === 'refuse') <i class="fa-solid fa-circle text-[6px]"></i> Refusé
+                                                    @else <i class="fa-solid fa-clock"></i> En attente @endif
+                                                </span>
+                                            </td>
+
+                                            <!-- Actions -->
+                                            <td class="py-4 px-4 text-right">
+                                                <div class="flex items-center justify-end gap-1.5">
+                                                    <!-- WhatsApp Relance 1 Clic -->
+                                                    <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $cand->telephone) }}?text={{ urlencode("Bonjour {$cand->prenom}, la Scolarité de l'Université Emi Koussi (UNEK) vous informe que votre dossier N° {$cand->code_dossier} est actuellement : " . strtoupper($cand->statut) . ". Remarques : " . ($cand->remarques_admin ?? 'Dossier en cours d\'examen.')) }}" target="_blank" class="p-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 transition" title="Relance WhatsApp 1-Clic">
+                                                        <i class="fa-brands fa-whatsapp text-sm"></i>
+                                                    </a>
+
+                                                    <button @click="inspectCandidate({{ json_encode($cand) }})" class="px-3.5 py-1.5 rounded-xl bg-amber-400 hover:bg-amber-500 text-slate-950 font-extrabold text-xs transition flex items-center gap-1.5 shadow-sm">
+                                                        <i class="fa-solid fa-folder-open"></i> Étudier
+                                                    </button>
+                                                    
+                                                    <a href="{{ route('admissions.confirmation', $cand->code_dossier) }}" target="_blank" class="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition" title="Attestation officielle avec QR Code">
+                                                        <i class="fa-solid fa-print"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="6" class="py-12 text-center text-slate-400 text-xs">
+                                                Aucune candidature trouvée.
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
                         </div>
                     </div>
 
-                    <!-- Analytics 2: Top Filières Demandées -->
-                    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-                        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-                            <h3 class="font-['Outfit'] font-bold text-sm text-slate-900 flex items-center gap-2">
-                                <i class="fa-solid fa-fire text-rose-500"></i> Top Filières les plus Demandées
-                            </h3>
-                            <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-rose-50 text-rose-700 border border-rose-200">Demandes LMD</span>
-                        </div>
-
-                        <div class="space-y-3 text-xs">
-                            @foreach($filiereStats as $fil => $count)
-                                @php
-                                    $percent = $stats['total'] > 0 ? round(($count / $stats['total']) * 100) : 0;
-                                @endphp
-                                <div>
-                                    <div class="flex justify-between font-semibold mb-1">
-                                        <span class="text-slate-800 font-bold truncate max-w-xs">{{ $fil }}</span>
-                                        <span class="font-mono text-amber-700 font-extrabold">{{ $count }} demandes</span>
-                                    </div>
-                                    <div class="w-full h-2 rounded-full bg-slate-100 overflow-hidden">
-                                        <div class="h-full bg-gradient-to-r from-sky-500 to-emerald-500 rounded-full" style="width: {{ $percent }}%"></div>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
-
                 </div>
 
-                <!-- CANDIDATES DATA TABLE -->
-                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse text-xs">
-                            <thead>
-                                <tr class="bg-slate-50/80 border-b border-slate-200 text-slate-500 font-bold uppercase tracking-wider text-[11px]">
-                                    <th class="py-4 px-4">Code Dossier</th>
-                                    <th class="py-4 px-4">Identité Candidat</th>
-                                    <th class="py-4 px-4">Affectation Académique</th>
-                                    <th class="py-4 px-4">Date Dépôt</th>
-                                    <th class="py-4 px-4">Statut Décision</th>
-                                    <th class="py-4 px-4 text-right">Examen & Relance</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-slate-100 font-medium">
-                                @forelse($candidatures as $cand)
-                                    <tr class="hover:bg-slate-50/80 transition">
-                                        <!-- Code Dossier -->
-                                        <td class="py-4 px-4">
-                                            <a href="{{ route('admissions.confirmation', $cand->code_dossier) }}" target="_blank" class="font-mono font-extrabold text-amber-600 hover:underline">
-                                                {{ $cand->code_dossier }}
-                                            </a>
-                                        </td>
+                <!-- MAIN TAB 2: ANALYTICS DASHBOARD -->
+                <div x-show="mainTab === 'analytics'" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        
+                        <!-- Analytics 1: Nationalités -->
+                        <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+                            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                                <h3 class="font-['Outfit'] font-bold text-base text-slate-900 flex items-center gap-2">
+                                    <i class="fa-solid fa-earth-africa text-amber-500"></i> Répartition par Nationalité
+                                </h3>
+                                <span class="text-xs font-mono font-bold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600">Proportion %</span>
+                            </div>
 
-                                        <!-- Candidat -->
-                                        <td class="py-4 px-4">
-                                            <div class="font-extrabold text-slate-900 text-xs">{{ $cand->nom }} {{ $cand->prenom }}</div>
-                                            <div class="text-[11px] text-slate-500 flex items-center gap-2 mt-0.5">
-                                                <span><i class="fa-solid fa-phone text-[10px] text-slate-400"></i> {{ $cand->telephone }}</span>
-                                                <span>•</span>
-                                                <span>{{ $cand->email }}</span>
-                                            </div>
-                                        </td>
+                            <div class="space-y-4 text-xs">
+                                @foreach($nationaliteStats as $nat => $count)
+                                    @php
+                                        $percent = $stats['total'] > 0 ? round(($count / $stats['total']) * 100) : 0;
+                                    @endphp
+                                    <div>
+                                        <div class="flex justify-between font-bold mb-1">
+                                            <span class="text-slate-800">{{ $nat }}</span>
+                                            <span class="font-mono text-amber-700">{{ $count }} étudiants ({{ $percent }}%)</span>
+                                        </div>
+                                        <div class="w-full h-3 rounded-full bg-slate-100 overflow-hidden p-0.5">
+                                            <div class="h-full bg-gradient-to-r from-amber-400 to-amber-600 rounded-full transition-all duration-500" style="width: {{ $percent }}%"></div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
 
-                                        <!-- Formation -->
-                                        <td class="py-4 px-4">
-                                            <div class="font-bold text-slate-800">{{ $cand->filiere }}</div>
-                                            <div class="text-[11px] text-slate-400 truncate max-w-xs">{{ $cand->cycle }} — {{ Str::limit($cand->faculte, 35) }}</div>
-                                        </td>
+                        <!-- Analytics 2: Top Filières Demandées -->
+                        <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+                            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                                <h3 class="font-['Outfit'] font-bold text-base text-slate-900 flex items-center gap-2">
+                                    <i class="fa-solid fa-fire text-rose-500"></i> Top Filières les plus Demandées
+                                </h3>
+                                <span class="text-xs font-mono font-bold px-2.5 py-0.5 rounded-full bg-rose-50 text-rose-700 border border-rose-200">Demandes LMD</span>
+                            </div>
 
-                                        <!-- Date -->
-                                        <td class="py-4 px-4 text-slate-500">
-                                            {{ date('d/m/Y', strtotime($cand->created_at)) }}
-                                            <span class="text-[10px] text-slate-400 block">{{ date('H:i', strtotime($cand->created_at)) }}</span>
-                                        </td>
+                            <div class="space-y-4 text-xs">
+                                @foreach($filiereStats as $fil => $count)
+                                    @php
+                                        $percent = $stats['total'] > 0 ? round(($count / $stats['total']) * 100) : 0;
+                                    @endphp
+                                    <div>
+                                        <div class="flex justify-between font-bold mb-1">
+                                            <span class="text-slate-900 truncate max-w-xs">{{ $fil }}</span>
+                                            <span class="font-mono text-emerald-700">{{ $count }} demandes</span>
+                                        </div>
+                                        <div class="w-full h-3 rounded-full bg-slate-100 overflow-hidden p-0.5">
+                                            <div class="h-full bg-gradient-to-r from-sky-500 to-emerald-500 rounded-full transition-all duration-500" style="width: {{ $percent }}%"></div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
 
-                                        <!-- Statut Badge -->
-                                        <td class="py-4 px-4">
-                                            <span class="px-2.5 py-1 rounded-full font-bold text-[10px] inline-flex items-center gap-1.5
-                                                @if($cand->statut === 'admis') bg-emerald-100 text-emerald-800 border border-emerald-200
-                                                @elseif($cand->statut === 'incomplet') bg-amber-100 text-amber-800 border border-amber-200
-                                                @elseif($cand->statut === 'refuse') bg-rose-100 text-rose-800 border border-rose-200
-                                                @else bg-sky-100 text-sky-800 border border-sky-200 @endif">
-                                                @if($cand->statut === 'admis') <i class="fa-solid fa-circle text-[6px]"></i> Admis
-                                                @elseif($cand->statut === 'incomplet') <i class="fa-solid fa-triangle-exclamation"></i> Incomplet
-                                                @elseif($cand->statut === 'refuse') <i class="fa-solid fa-circle text-[6px]"></i> Refusé
-                                                @else <i class="fa-solid fa-clock"></i> En attente @endif
-                                            </span>
-                                        </td>
-
-                                        <!-- Actions -->
-                                        <td class="py-4 px-4 text-right">
-                                            <div class="flex items-center justify-end gap-1.5">
-                                                <!-- WhatsApp Relance 1 Clic -->
-                                                <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $cand->telephone) }}?text={{ urlencode("Bonjour {$cand->prenom}, la Scolarité de l'Université Emi Koussi (UNEK) vous informe que votre dossier N° {$cand->code_dossier} est actuellement : " . strtoupper($cand->statut) . ". Remarques : " . ($cand->remarques_admin ?? 'Dossier en cours d\'examen.')) }}" target="_blank" class="p-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 transition" title="Relance WhatsApp 1-Clic">
-                                                    <i class="fa-brands fa-whatsapp text-sm"></i>
-                                                </a>
-
-                                                <button @click="inspectCandidate({{ json_encode($cand) }})" class="px-3 py-1.5 rounded-xl bg-amber-400 hover:bg-amber-500 text-slate-950 font-extrabold text-xs transition flex items-center gap-1.5 shadow-sm">
-                                                    <i class="fa-solid fa-folder-open"></i> Étudier
-                                                </button>
-                                                
-                                                <a href="{{ route('admissions.confirmation', $cand->code_dossier) }}" target="_blank" class="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition" title="Attestation officielle avec QR Code">
-                                                    <i class="fa-solid fa-print"></i>
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="6" class="py-12 text-center text-slate-400 text-xs">
-                                            Aucune candidature trouvée.
-                                        </td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
                     </div>
                 </div>
 
@@ -425,9 +451,9 @@
                     <div class="flex flex-col h-full">
                         
                         <!-- Drawer Header -->
-                        <div class="p-6 bg-[#0B1528] text-white border-b border-slate-800 flex items-center justify-between">
-                            <div class="flex items-center gap-3">
-                                <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 text-slate-950 flex items-center justify-center font-bold text-xl shadow-md">
+                        <div class="p-6 bg-[#09101E] text-white border-b border-slate-800 flex items-center justify-between">
+                            <div class="flex items-center gap-3.5">
+                                <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 text-slate-950 flex items-center justify-center font-bold text-xl shadow-lg">
                                     <i class="fa-solid fa-id-card"></i>
                                 </div>
                                 <div>
@@ -443,13 +469,13 @@
 
                         <!-- Drawer Navigation Tabs -->
                         <div class="flex border-b border-slate-200 text-xs font-bold gap-2 px-6 bg-slate-50 pt-2">
-                            <button @click="activeTab = 'info'" class="pb-3 px-4 border-b-2 transition" :class="activeTab === 'info' ? 'border-amber-500 text-amber-700 font-extrabold' : 'border-transparent text-slate-500 hover:text-slate-800'">
+                            <button @click="drawerTab = 'info'" class="pb-3 px-4 border-b-2 transition" :class="drawerTab === 'info' ? 'border-amber-500 text-amber-700 font-extrabold' : 'border-transparent text-slate-500 hover:text-slate-800'">
                                 <i class="fa-solid fa-user mr-1.5"></i> Identité & Choix
                             </button>
-                            <button @click="activeTab = 'docs'" class="pb-3 px-4 border-b-2 transition" :class="activeTab === 'docs' ? 'border-amber-500 text-amber-700 font-extrabold' : 'border-transparent text-slate-500 hover:text-slate-800'">
-                                <i class="fa-solid fa-file-pdf mr-1.5"></i> Pièces Justificatives
+                            <button @click="drawerTab = 'docs'" class="pb-3 px-4 border-b-2 transition" :class="drawerTab === 'docs' ? 'border-amber-500 text-amber-700 font-extrabold' : 'border-transparent text-slate-500 hover:text-slate-800'">
+                                <i class="fa-solid fa-file-pdf mr-1.5"></i> Pièces Numérisées
                             </button>
-                            <button @click="activeTab = 'decision'" class="pb-3 px-4 border-b-2 transition" :class="activeTab === 'decision' ? 'border-amber-500 text-amber-700 font-extrabold' : 'border-transparent text-slate-500 hover:text-slate-800'">
+                            <button @click="drawerTab = 'decision'" class="pb-3 px-4 border-b-2 transition" :class="drawerTab === 'decision' ? 'border-amber-500 text-amber-700 font-extrabold' : 'border-transparent text-slate-500 hover:text-slate-800'">
                                 <i class="fa-solid fa-gavel mr-1.5"></i> Décision du Jury
                             </button>
                         </div>
@@ -458,37 +484,37 @@
                         <div class="p-6 flex-1 overflow-y-auto space-y-6">
                             
                             <!-- TAB 1: IDENTITÉ -->
-                            <div x-show="activeTab === 'info'" class="space-y-4 text-xs">
+                            <div x-show="drawerTab === 'info'" class="space-y-4 text-xs">
                                 <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3">
-                                    <div class="flex justify-between py-1.5 border-b border-slate-200">
+                                    <div class="flex justify-between py-2 border-b border-slate-200">
                                         <span class="text-slate-500 font-semibold">Nom & Prénom :</span>
-                                        <span class="font-extrabold text-slate-900 uppercase" x-text="selectedCandidate.nom + ' ' + selectedCandidate.prenom"></span>
+                                        <span class="font-extrabold text-slate-900 uppercase text-sm" x-text="selectedCandidate.nom + ' ' + selectedCandidate.prenom"></span>
                                     </div>
-                                    <div class="flex justify-between py-1.5 border-b border-slate-200">
+                                    <div class="flex justify-between py-2 border-b border-slate-200">
                                         <span class="text-slate-500 font-semibold">Genre / Nationalité :</span>
                                         <span class="font-bold text-slate-900" x-text="(selectedCandidate.genre === 'M' ? 'Masculin' : 'Féminin') + ' (' + selectedCandidate.nationalite + ')'"></span>
                                     </div>
-                                    <div class="flex justify-between py-1.5 border-b border-slate-200">
+                                    <div class="flex justify-between py-2 border-b border-slate-200">
                                         <span class="text-slate-500 font-semibold">Téléphone / WhatsApp :</span>
-                                        <span class="font-bold text-slate-900 font-mono" x-text="selectedCandidate.telephone"></span>
+                                        <span class="font-bold text-slate-900 font-mono text-sm" x-text="selectedCandidate.telephone"></span>
                                     </div>
-                                    <div class="flex justify-between py-1.5 border-b border-slate-200">
+                                    <div class="flex justify-between py-2 border-b border-slate-200">
                                         <span class="text-slate-500 font-semibold">Adresse Email :</span>
                                         <span class="font-bold text-slate-900" x-text="selectedCandidate.email"></span>
                                     </div>
-                                    <div class="flex justify-between py-1.5 border-b border-slate-200">
+                                    <div class="flex justify-between py-2 border-b border-slate-200">
                                         <span class="text-slate-500 font-semibold">Faculté Académique :</span>
                                         <span class="font-bold text-slate-900" x-text="selectedCandidate.faculte"></span>
                                     </div>
-                                    <div class="flex justify-between py-1.5">
+                                    <div class="flex justify-between py-2">
                                         <span class="text-slate-500 font-semibold">Filière & Niveau :</span>
-                                        <span class="font-extrabold text-amber-700" x-text="selectedCandidate.filiere + ' (' + selectedCandidate.cycle + ')'"></span>
+                                        <span class="font-extrabold text-amber-700 text-sm" x-text="selectedCandidate.filiere + ' (' + selectedCandidate.cycle + ')'"></span>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- TAB 2: PIÈCES NUMÉRISÉES -->
-                            <div x-show="activeTab === 'docs'" class="space-y-6 text-xs">
+                            <div x-show="drawerTab === 'docs'" class="space-y-6 text-xs">
                                 <div class="p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 flex items-center justify-between">
                                     <span class="flex items-center gap-2 font-semibold">
                                         <i class="fa-solid fa-shield-halved text-amber-600 text-base"></i> Contrôle de conformité des pièces de candidature
@@ -568,7 +594,7 @@
                             </div>
 
                             <!-- TAB 3: DÉCISION DU JURY -->
-                            <div x-show="activeTab === 'decision' || activeTab === 'info'" class="space-y-5 text-xs">
+                            <div x-show="drawerTab === 'decision' || drawerTab === 'info'" class="space-y-5 text-xs">
                                 <form :action="'/admin/candidature/' + selectedCandidate.id + '/status'" method="POST" class="space-y-5">
                                     @csrf
 
@@ -606,7 +632,7 @@
                                         <a :href="'/admissions/confirmation/' + selectedCandidate.code_dossier" target="_blank" class="text-amber-700 hover:underline font-bold">
                                             <i class="fa-solid fa-print mr-1"></i> Attestation QR Code
                                         </a>
-                                        <button type="submit" class="px-6 py-3 rounded-xl bg-[#0B1528] hover:bg-slate-800 text-white font-extrabold shadow-md transition flex items-center gap-2">
+                                        <button type="submit" class="px-6 py-3 rounded-xl bg-[#09101E] hover:bg-slate-800 text-white font-extrabold shadow-md transition flex items-center gap-2">
                                             <i class="fa-solid fa-check"></i> Enregistrer la Décision
                                         </button>
                                     </div>
@@ -670,7 +696,7 @@
                     </div>
 
                     <div class="pt-2 flex justify-end">
-                        <button type="button" @click="docPreviewModalOpen = false" class="px-5 py-2.5 rounded-xl bg-[#0B1528] hover:bg-slate-800 text-white font-bold text-xs transition">
+                        <button type="button" @click="docPreviewModalOpen = false" class="px-5 py-2.5 rounded-xl bg-[#09101E] hover:bg-slate-800 text-white font-bold text-xs transition">
                             Fermer l'Aperçu
                         </button>
                     </div>
