@@ -1,12 +1,13 @@
 # Image PHP 8.4 Apache officielle pour Laravel 13
 FROM php:8.4-apache
 
-# Installation des paquets système nécessaires (PHP + Node.js)
+# Installation des paquets système nécessaires (PHP + Node.js + PostgreSQL)
 RUN apt-get update && apt-get install -y \
     libpng-dev \
     libjpeg62-turbo-dev \
     libfreetype6-dev \
     libsqlite3-dev \
+    libpq-dev \
     zip \
     unzip \
     git \
@@ -14,7 +15,7 @@ RUN apt-get update && apt-get install -y \
     nodejs \
     npm \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install -j$(nproc) gd pdo pdo_sqlite pdo_mysql
+    && docker-php-ext-install -j$(nproc) gd pdo pdo_sqlite pdo_mysql pdo_pgsql
 
 # Activation du mod_rewrite Apache
 RUN a2enmod rewrite
@@ -53,7 +54,7 @@ RUN mkdir -p /var/www/html/storage/framework/views /var/www/html/storage/framewo
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database /var/www/html/public
 RUN chmod -R 777 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database /var/www/html/public
 
-# Création de la BDD SQLite
+# Création de la BDD SQLite par défaut
 RUN touch /var/www/html/database/database.sqlite \
     && chown www-data:www-data /var/www/html/database/database.sqlite \
     && chmod 777 /var/www/html/database/database.sqlite
