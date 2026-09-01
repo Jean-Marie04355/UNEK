@@ -29,17 +29,24 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www/html
 COPY . .
 
+# Fichier .env pour la production avec clé générée
+RUN cp .env.example .env
+
 # Installation des dépendances Composer
 RUN composer install --no-dev --optimize-autoloader --ignore-platform-reqs
 
-# Permissions de stockage et de cache
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
-RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+# Création des dossiers de cache & storage avec permissions totales
+RUN mkdir -p /var/www/html/storage/framework/views /var/www/html/storage/framework/sessions /var/www/html/storage/framework/cache /var/www/html/bootstrap/cache
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database
+RUN chmod -R 777 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database
 
 # Création de la BDD SQLite
 RUN touch /var/www/html/database/database.sqlite \
     && chown www-data:www-data /var/www/html/database/database.sqlite \
-    && chmod 775 /var/www/html/database/database.sqlite
+    && chmod 777 /var/www/html/database/database.sqlite
+
+# Génération de la clé Laravel
+RUN php artisan key:generate --force
 
 EXPOSE 80
 
