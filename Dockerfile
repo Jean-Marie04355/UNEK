@@ -1,7 +1,7 @@
 # Image PHP 8.4 Apache officielle pour Laravel 13
 FROM php:8.4-apache
 
-# Installation des paquets système nécessaires
+# Installation des paquets système nécessaires (PHP + Node.js)
 RUN apt-get update && apt-get install -y \
     libpng-dev \
     libjpeg62-turbo-dev \
@@ -11,6 +11,8 @@ RUN apt-get update && apt-get install -y \
     unzip \
     git \
     curl \
+    nodejs \
+    npm \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd pdo pdo_sqlite pdo_mysql
 
@@ -35,10 +37,13 @@ RUN cp .env.example .env
 # Installation des dépendances Composer
 RUN composer install --no-dev --optimize-autoloader --ignore-platform-reqs
 
+# Installation & compilation des assets Vite/Tailwind
+RUN npm install && npm run build
+
 # Création des dossiers de cache & storage avec permissions totales
 RUN mkdir -p /var/www/html/storage/framework/views /var/www/html/storage/framework/sessions /var/www/html/storage/framework/cache /var/www/html/bootstrap/cache
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database
-RUN chmod -R 777 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database /var/www/html/public/build
+RUN chmod -R 777 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database /var/www/html/public/build
 
 # Création de la BDD SQLite
 RUN touch /var/www/html/database/database.sqlite \
