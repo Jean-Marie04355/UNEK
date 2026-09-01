@@ -1,5 +1,5 @@
-# Image PHP 8.2 Apache officielle
-FROM php:8.2-apache
+# Image PHP 8.4 Apache officielle pour Laravel 13
+FROM php:8.4-apache
 
 # Installation des paquets système nécessaires
 RUN apt-get update && apt-get install -y \
@@ -29,8 +29,8 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www/html
 COPY . .
 
-# Installation des dépendances Composer sans dev
-RUN composer install --no-dev --optimize-autoloader
+# Installation des dépendances Composer
+RUN composer install --no-dev --optimize-autoloader --ignore-platform-reqs
 
 # Permissions de stockage et de cache
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
