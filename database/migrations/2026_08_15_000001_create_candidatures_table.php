@@ -26,12 +26,17 @@ return new class extends Migration
             $table->string('cycle')->default('Licence 1');
             $table->string('faculte');
             $table->string('filiere');
+            $table->string('filiere_proposee')->nullable();
             
             $table->enum('statut', ['en_attente', 'admis', 'incomplet', 'refuse'])->default('en_attente');
             
             $table->string('bac_path')->nullable();
             $table->string('cni_path')->nullable();
             $table->string('photo_path')->nullable();
+
+            $table->string('bac_status')->default('conforme');
+            $table->string('cni_status')->default('conforme');
+            $table->string('photo_status')->default('conforme');
             
             $table->text('remarques_admin')->nullable();
             $table->timestamps();

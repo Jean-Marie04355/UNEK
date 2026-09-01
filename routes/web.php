@@ -40,6 +40,8 @@ Route::get('/contact', function () {
 
 // Espace Administration Scolarité UNEK
 Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
+Route::get('/admin/export/csv', [AdminController::class, 'exportCsv'])->name('admin.export.csv');
+Route::get('/admin/pv-deliberation', [AdminController::class, 'pvDeliberation'])->name('admin.pv');
 Route::get('/admin/candidature/{id}', [AdminController::class, 'show'])->name('admin.candidature.show');
 Route::post('/admin/candidature/{id}/status', [AdminController::class, 'updateStatus'])->name('admin.candidature.status');
 Route::delete('/admin/candidature/{id}', [AdminController::class, 'destroy'])->name('admin.candidature.destroy');

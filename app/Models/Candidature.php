@@ -22,10 +22,14 @@ class Candidature extends Model
         'cycle',
         'faculte',
         'filiere',
+        'filiere_proposee',
         'statut',
         'bac_path',
         'cni_path',
         'photo_path',
+        'bac_status',
+        'cni_status',
+        'photo_status',
         'remarques_admin',
     ];
 

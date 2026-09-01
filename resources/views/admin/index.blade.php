@@ -113,17 +113,24 @@
         <main class="flex-1 flex flex-col min-w-0">
             
             <!-- TOP BAR -->
-            <header class="h-20 bg-white border-b border-slate-200 px-6 flex items-center justify-between shadow-sm">
+            <header class="bg-white border-b border-slate-200 px-6 py-4 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-sm">
                 <div>
                     <h1 class="font-['Outfit'] font-extrabold text-xl text-slate-900">Tableau de Bord des Admissions 2026-2027</h1>
                     <p class="text-xs text-slate-500">Gestion des candidatures, examen des dossiers et validation des diplômes</p>
                 </div>
 
-                <div class="flex items-center gap-3">
-                    <span class="px-3 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-bold border border-amber-200">
-                        Session Académique 2026-2027
-                    </span>
-                    <a href="{{ route('admissions') }}" target="_blank" class="px-4 py-2 rounded-xl bg-[#0B1528] hover:bg-slate-800 text-white font-bold text-xs shadow-md transition flex items-center gap-2">
+                <div class="flex flex-wrap items-center gap-2.5 text-xs">
+                    <!-- Export CSV -->
+                    <a href="{{ route('admin.export.csv') }}" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold transition flex items-center gap-1.5 shadow-sm">
+                        <i class="fa-solid fa-file-excel"></i> Exporter Listing (CSV)
+                    </a>
+
+                    <!-- PV Délibération -->
+                    <a href="{{ route('admin.pv') }}" target="_blank" class="px-3.5 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold transition flex items-center gap-1.5 shadow-sm">
+                        <i class="fa-solid fa-file-pdf"></i> PV Délibération (PDF)
+                    </a>
+
+                    <a href="{{ route('admissions') }}" target="_blank" class="px-4 py-2 rounded-xl bg-[#0B1528] hover:bg-slate-800 text-white font-bold shadow-md transition flex items-center gap-2">
                         <i class="fa-solid fa-user-plus text-amber-400"></i> Nouvelle Candidature
                     </a>
                 </div>
@@ -253,6 +260,65 @@
                     </form>
                 </div>
 
+                <!-- ANALYTICS CARDS (GRAPHICAL DISTRIBUTION) -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    
+                    <!-- Analytics 1: Nationalités -->
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                            <h3 class="font-['Outfit'] font-bold text-sm text-slate-900 flex items-center gap-2">
+                                <i class="fa-solid fa-earth-africa text-amber-500"></i> Répartition Géographique (Nationalités)
+                            </h3>
+                            <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-slate-100 text-slate-600">Session 2026</span>
+                        </div>
+
+                        <div class="space-y-3 text-xs">
+                            @foreach($nationaliteStats as $nat => $count)
+                                @php
+                                    $percent = $stats['total'] > 0 ? round(($count / $stats['total']) * 100) : 0;
+                                @endphp
+                                <div>
+                                    <div class="flex justify-between font-semibold mb-1">
+                                        <span class="text-slate-700">{{ $nat }}</span>
+                                        <span class="font-mono text-slate-900">{{ $count }} candidats ({{ $percent }}%)</span>
+                                    </div>
+                                    <div class="w-full h-2 rounded-full bg-slate-100 overflow-hidden">
+                                        <div class="h-full bg-gradient-to-r from-amber-400 to-amber-600 rounded-full" style="width: {{ $percent }}%"></div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    <!-- Analytics 2: Top Filières Demandées -->
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                            <h3 class="font-['Outfit'] font-bold text-sm text-slate-900 flex items-center gap-2">
+                                <i class="fa-solid fa-fire text-rose-500"></i> Top Filières les plus Demandées
+                            </h3>
+                            <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-rose-50 text-rose-700 border border-rose-200">Demandes LMD</span>
+                        </div>
+
+                        <div class="space-y-3 text-xs">
+                            @foreach($filiereStats as $fil => $count)
+                                @php
+                                    $percent = $stats['total'] > 0 ? round(($count / $stats['total']) * 100) : 0;
+                                @endphp
+                                <div>
+                                    <div class="flex justify-between font-semibold mb-1">
+                                        <span class="text-slate-800 font-bold truncate max-w-xs">{{ $fil }}</span>
+                                        <span class="font-mono text-amber-700 font-extrabold">{{ $count }} demandes</span>
+                                    </div>
+                                    <div class="w-full h-2 rounded-full bg-slate-100 overflow-hidden">
+                                        <div class="h-full bg-gradient-to-r from-sky-500 to-emerald-500 rounded-full" style="width: {{ $percent }}%"></div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+
+                </div>
+
                 <!-- CANDIDATES DATA TABLE -->
                 <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
                     <div class="overflow-x-auto">
@@ -264,7 +330,7 @@
                                     <th class="py-4 px-4">Affectation Académique</th>
                                     <th class="py-4 px-4">Date Dépôt</th>
                                     <th class="py-4 px-4">Statut Décision</th>
-                                    <th class="py-4 px-4 text-right">Examen Dossier</th>
+                                    <th class="py-4 px-4 text-right">Examen & Relance</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-slate-100 font-medium">
@@ -315,7 +381,12 @@
 
                                         <!-- Actions -->
                                         <td class="py-4 px-4 text-right">
-                                            <div class="flex items-center justify-end gap-2">
+                                            <div class="flex items-center justify-end gap-1.5">
+                                                <!-- WhatsApp Relance 1 Clic -->
+                                                <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $cand->telephone) }}?text={{ urlencode("Bonjour {$cand->prenom}, la Scolarité de l'Université Emi Koussi (UNEK) vous informe que votre dossier N° {$cand->code_dossier} est actuellement : " . strtoupper($cand->statut) . ". Remarques : " . ($cand->remarques_admin ?? 'Dossier en cours d\'examen.')) }}" target="_blank" class="p-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 transition" title="Relance WhatsApp 1-Clic">
+                                                    <i class="fa-brands fa-whatsapp text-sm"></i>
+                                                </a>
+
                                                 <button @click="inspectCandidate({{ json_encode($cand) }})" class="px-3 py-1.5 rounded-xl bg-amber-400 hover:bg-amber-500 text-slate-950 font-extrabold text-xs transition flex items-center gap-1.5 shadow-sm">
                                                     <i class="fa-solid fa-folder-open"></i> Étudier
                                                 </button>

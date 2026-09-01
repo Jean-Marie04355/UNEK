@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Candidature;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 
 class AdminController extends Controller
 {
@@ -48,16 +49,84 @@ class AdminController extends Controller
             'refuse' => Candidature::where('statut', 'refuse')->count(),
         ];
 
-        return view('admin.index', compact('candidatures', 'stats'));
+        // Analytics: Répartition par nationalité & Filières
+        $nationaliteStats = Candidature::selectRaw('nationalite, count(*) as count')
+            ->groupBy('nationalite')
+            ->pluck('count', 'nationalite')
+            ->toArray();
+
+        $filiereStats = Candidature::selectRaw('filiere, count(*) as count')
+            ->groupBy('filiere')
+            ->orderBy('count', 'desc')
+            ->take(6)
+            ->pluck('count', 'filiere')
+            ->toArray();
+
+        return view('admin.index', compact('candidatures', 'stats', 'nationaliteStats', 'filiereStats'));
     }
 
     /**
-     * Retourne les détails d'une candidature en JSON.
+     * Exporte la liste officielle des candidats au format CSV/Excel.
      */
-    public function show($id)
+    public function exportCsv()
     {
-        $candidature = Candidature::findOrFail($id);
-        return response()->json($candidature);
+        $candidatures = Candidature::orderBy('created_at', 'desc')->get();
+        $filename = "Liste_Candidats_UNEK_2026_" . date('Y-m-d') . ".csv";
+
+        $headers = [
+            "Content-type"        => "text/csv; charset=UTF-8",
+            "Content-Disposition" => "attachment; filename=$filename",
+            "Pragma"              => "no-cache",
+            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
+            "Expires"             => "0"
+        ];
+
+        $columns = ['Code Dossier', 'Nom', 'Prenom', 'Genre', 'Nationalite', 'Telephone', 'Email', 'Faculte', 'Filiere', 'Cycle', 'Statut', 'Date Inscription'];
+
+        $callback = function() use ($candidatures, $columns) {
+            $file = fopen('php://output', 'w');
+            // Support UTF-8 Excel BOM
+            fputs($file, "\xEF\xBB\xBF");
+            fputcsv($file, $columns, ';');
+
+            foreach ($candidatures as $cand) {
+                fputcsv($file, [
+                    $cand->code_dossier,
+                    $cand->nom,
+                    $cand->prenom,
+                    $cand->genre,
+                    $cand->nationalite,
+                    $cand->telephone,
+                    $cand->email,
+                    $cand->faculte,
+                    $cand->filiere,
+                    $cand->cycle,
+                    strtoupper($cand->statut),
+                    $cand->created_at->format('d/m/Y H:i'),
+                ], ';');
+            }
+
+            fclose($file);
+        };
+
+        return Response::stream($callback, 200, $headers);
+    }
+
+    /**
+     * Génère le Procès-Verbal (PV) officiel de Délibération du Jury.
+     */
+    public function pvDeliberation(Request $request)
+    {
+        $faculte = $request->get('faculte', 'Toutes les Facultés');
+        $query = Candidature::where('statut', 'admis');
+
+        if ($request->filled('faculte')) {
+            $query->where('faculte', $request->faculte);
+        }
+
+        $admisList = $query->orderBy('faculte')->orderBy('filiere')->orderBy('nom')->get();
+
+        return view('admin.pv-deliberation', compact('admisList', 'faculte'));
     }
 
     /**
@@ -68,12 +137,20 @@ class AdminController extends Controller
         $request->validate([
             'statut' => 'required|in:en_attente,admis,incomplet,refuse',
             'remarques_admin' => 'nullable|string',
+            'bac_status' => 'nullable|string',
+            'cni_status' => 'nullable|string',
+            'photo_status' => 'nullable|string',
+            'filiere_proposee' => 'nullable|string',
         ]);
 
         $candidature = Candidature::findOrFail($id);
         $candidature->update([
             'statut' => $request->statut,
             'remarques_admin' => $request->remarques_admin,
+            'bac_status' => $request->get('bac_status', 'conforme'),
+            'cni_status' => $request->get('cni_status', 'conforme'),
+            'photo_status' => $request->get('photo_status', 'conforme'),
+            'filiere_proposee' => $request->get('filiere_proposee'),
         ]);
 
         if ($request->wantsJson() || $request->ajax()) {
@@ -84,7 +161,7 @@ class AdminController extends Controller
             ]);
         }
 
-        return redirect()->back()->with('success', 'Statut du dossier ' . $candidature->code_dossier . ' mis à jour.');
+        return redirect()->back()->with('success', 'Décision du dossier ' . $candidature->code_dossier . ' enregistrée avec succès.');
     }
 
     /**
