@@ -34,6 +34,8 @@
 <body class="h-full font-['Plus_Jakarta_Sans'] bg-slate-100 text-slate-800 antialiased" x-data="{
     sidebarOpen: false,
     drawerOpen: false,
+    docPreviewModalOpen: false,
+    previewingDoc: null,
     activeTab: 'info',
     selectedCandidate: null,
     
@@ -415,31 +417,80 @@
                             </div>
 
                             <!-- TAB 2: PIÈCES NUMÉRISÉES -->
-                            <div x-show="activeTab === 'docs'" class="space-y-4 text-xs">
+                            <div x-show="activeTab === 'docs'" class="space-y-6 text-xs">
+                                <div class="p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 flex items-center justify-between">
+                                    <span class="flex items-center gap-2 font-semibold">
+                                        <i class="fa-solid fa-shield-halved text-amber-600 text-base"></i> Contrôle de conformité des pièces de candidature
+                                    </span>
+                                    <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-white border border-amber-300">3 Fichiers</span>
+                                </div>
+
                                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                                     
-                                    <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50 text-center">
-                                        <i class="fa-solid fa-file-pdf text-4xl text-rose-500 mb-2"></i>
-                                        <h4 class="font-bold text-slate-800">Baccalauréat</h4>
-                                        <button type="button" @click="alert('Ouverture du scan Baccalauréat du candidat ' + selectedCandidate.code_dossier)" class="mt-3 w-full py-2 rounded-xl bg-slate-900 text-white font-bold text-[11px] hover:bg-slate-800 transition">
-                                            <i class="fa-solid fa-eye"></i> Aperçu Bac
-                                        </button>
+                                    <!-- File 1: BAC -->
+                                    <div class="p-5 rounded-2xl border border-slate-200 bg-white text-center shadow-sm space-y-3">
+                                        <div class="w-12 h-12 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center text-2xl mx-auto">
+                                            <i class="fa-solid fa-file-pdf"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-slate-900 text-sm">Baccalauréat</h4>
+                                            <p class="text-[10px] text-slate-400 mt-0.5">Attestation / Relevé de Notes</p>
+                                        </div>
+
+                                        <template x-if="selectedCandidate.bac_path">
+                                            <a :href="'/storage/' + selectedCandidate.bac_path" target="_blank" class="w-full py-2 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs transition flex items-center justify-center gap-1.5">
+                                                <i class="fa-solid fa-external-link"></i> Ouvrir le Fichier
+                                            </a>
+                                        </template>
+                                        <template x-if="!selectedCandidate.bac_path">
+                                            <button type="button" @click="docPreviewModalOpen = true; previewingDoc = { type: 'Baccalauréat', candidate: selectedCandidate }" class="w-full py-2 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs transition flex items-center justify-center gap-1.5">
+                                                <i class="fa-solid fa-eye"></i> Aperçu Document
+                                            </button>
+                                        </template>
                                     </div>
 
-                                    <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50 text-center">
-                                        <i class="fa-solid fa-address-card text-4xl text-amber-500 mb-2"></i>
-                                        <h4 class="font-bold text-slate-800">Pièce CNI</h4>
-                                        <button type="button" @click="alert('Ouverture de la pièce d\'identité du candidat ' + selectedCandidate.code_dossier)" class="mt-3 w-full py-2 rounded-xl bg-slate-900 text-white font-bold text-[11px] hover:bg-slate-800 transition">
-                                            <i class="fa-solid fa-eye"></i> Aperçu CNI
-                                        </button>
+                                    <!-- File 2: CNI -->
+                                    <div class="p-5 rounded-2xl border border-slate-200 bg-white text-center shadow-sm space-y-3">
+                                        <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center text-2xl mx-auto">
+                                            <i class="fa-solid fa-address-card"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-slate-900 text-sm">CNI / Passeport</h4>
+                                            <p class="text-[10px] text-slate-400 mt-0.5">Pièce d'Identité Recto-Verso</p>
+                                        </div>
+
+                                        <template x-if="selectedCandidate.cni_path">
+                                            <a :href="'/storage/' + selectedCandidate.cni_path" target="_blank" class="w-full py-2 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs transition flex items-center justify-center gap-1.5">
+                                                <i class="fa-solid fa-external-link"></i> Ouvrir la CNI
+                                            </a>
+                                        </template>
+                                        <template x-if="!selectedCandidate.cni_path">
+                                            <button type="button" @click="docPreviewModalOpen = true; previewingDoc = { type: 'Carte CNI / Passeport', candidate: selectedCandidate }" class="w-full py-2 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs transition flex items-center justify-center gap-1.5">
+                                                <i class="fa-solid fa-eye"></i> Aperçu CNI
+                                            </button>
+                                        </template>
                                     </div>
 
-                                    <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50 text-center">
-                                        <i class="fa-solid fa-image text-4xl text-emerald-500 mb-2"></i>
-                                        <h4 class="font-bold text-slate-800">Photo d'Identité</h4>
-                                        <button type="button" @click="alert('Ouverture de la photo du candidat ' + selectedCandidate.code_dossier)" class="mt-3 w-full py-2 rounded-xl bg-slate-900 text-white font-bold text-[11px] hover:bg-slate-800 transition">
-                                            <i class="fa-solid fa-eye"></i> Aperçu Photo
-                                        </button>
+                                    <!-- File 3: Photo -->
+                                    <div class="p-5 rounded-2xl border border-slate-200 bg-white text-center shadow-sm space-y-3">
+                                        <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-2xl mx-auto">
+                                            <i class="fa-solid fa-image"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-slate-900 text-sm">Photo d'Identité</h4>
+                                            <p class="text-[10px] text-slate-400 mt-0.5">Format Passeport Fond Blanc</p>
+                                        </div>
+
+                                        <template x-if="selectedCandidate.photo_path">
+                                            <a :href="'/storage/' + selectedCandidate.photo_path" target="_blank" class="w-full py-2 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs transition flex items-center justify-center gap-1.5">
+                                                <i class="fa-solid fa-external-link"></i> Voir la Photo
+                                            </a>
+                                        </template>
+                                        <template x-if="!selectedCandidate.photo_path">
+                                            <button type="button" @click="docPreviewModalOpen = true; previewingDoc = { type: 'Photo d\'Identité', candidate: selectedCandidate }" class="w-full py-2 px-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs transition flex items-center justify-center gap-1.5">
+                                                <i class="fa-solid fa-eye"></i> Aperçu Photo
+                                            </button>
+                                        </template>
                                     </div>
 
                                 </div>
@@ -498,6 +549,62 @@
                 </template>
 
             </div>
+        </div>
+    </div>
+
+    <!-- LIGHTBOX MODAL APERÇU DE DOCUMENT NUMÉRISÉ -->
+    <div x-show="docPreviewModalOpen" x-cloak class="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
+        <div @click.away="docPreviewModalOpen = false" class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl text-slate-900 border border-slate-200 relative">
+            <button @click="docPreviewModalOpen = false" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700 transition">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+
+            <template x-if="previewingDoc">
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3 pb-3 border-b border-slate-100">
+                        <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 font-bold flex items-center justify-center text-lg">
+                            <i class="fa-solid fa-file-contract"></i>
+                        </div>
+                        <div>
+                            <span class="text-[10px] font-mono font-extrabold text-amber-600 uppercase tracking-wider block" x-text="previewingDoc.candidate.code_dossier"></span>
+                            <h4 class="font-['Outfit'] font-extrabold text-lg text-slate-900" x-text="previewingDoc.type"></h4>
+                        </div>
+                    </div>
+
+                    <!-- Visual Mockup Card -->
+                    <div class="bg-slate-50 border-2 border-dashed border-slate-300 rounded-2xl p-6 text-center space-y-3">
+                        <div class="w-16 h-16 rounded-2xl bg-white border border-slate-200 shadow-sm mx-auto flex items-center justify-center text-3xl text-amber-500">
+                            <i class="fa-solid fa-file-shield"></i>
+                        </div>
+                        <div>
+                            <span class="font-bold text-slate-800 text-sm block" x-text="previewingDoc.type + ' — Numérisé'"></span>
+                            <span class="text-xs text-slate-500 block mt-1">Candidat : <strong class="text-slate-900" x-text="previewingDoc.candidate.nom + ' ' + previewingDoc.candidate.prenom"></strong></span>
+                            <span class="text-[11px] text-emerald-600 font-bold block mt-1">
+                                <i class="fa-solid fa-circle-check"></i> Document Déposé & Intègre (Format PDF/Image)
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Checklist -->
+                    <div class="space-y-2 text-xs bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <span class="font-extrabold text-slate-900 block mb-1">Contrôle de Conformité Scolarité :</span>
+                        <label class="flex items-center gap-2 cursor-pointer font-medium text-slate-700">
+                            <input type="checkbox" checked class="rounded text-amber-500 focus:ring-amber-400">
+                            <span>Sceau officiel et signature visibles</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer font-medium text-slate-700">
+                            <input type="checkbox" checked class="rounded text-amber-500 focus:ring-amber-400">
+                            <span>Identité conforme à la pièce d'état civil</span>
+                        </label>
+                    </div>
+
+                    <div class="pt-2 flex justify-end">
+                        <button type="button" @click="docPreviewModalOpen = false" class="px-5 py-2.5 rounded-xl bg-[#0B1528] hover:bg-slate-800 text-white font-bold text-xs transition">
+                            Fermer l'Aperçu
+                        </button>
+                    </div>
+                </div>
+            </template>
         </div>
     </div>
 
