@@ -201,6 +201,84 @@
         </div>
     </footer>
 
+    <!-- WIDGET FLOTTANT D'ASSISTANCE DIRECTE SCOLARITÉ (OPTION 4) -->
+    <div x-data="{ supportOpen: false }" class="fixed bottom-6 right-6 z-50">
+        
+        <!-- Popover Menu -->
+        <div x-show="supportOpen" x-cloak 
+             x-transition:enter="transition ease-out duration-200 opacity-0 scale-95 translate-y-2"
+             x-transition:enter-start="opacity-0 scale-95 translate-y-2"
+             x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+             x-transition:leave="transition ease-in duration-150 opacity-100 scale-100 translate-y-0"
+             x-transition:leave-start="opacity-100 scale-100 translate-y-0"
+             x-transition:leave-end="opacity-0 scale-95 translate-y-2"
+             @click.away="supportOpen = false"
+             class="mb-3 bg-white rounded-3xl p-5 shadow-2xl border border-slate-200 text-slate-900 w-72 space-y-3">
+            
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-xl bg-amber-400 text-slate-950 flex items-center justify-center font-bold text-sm shadow-sm">
+                        <i class="fa-solid fa-headset"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-['Outfit'] font-bold text-xs text-slate-900">Scolarité UNEK</h4>
+                        <span class="text-[10px] text-emerald-600 font-bold flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> En Ligne
+                        </span>
+                    </div>
+                </div>
+                <button @click="supportOpen = false" class="text-slate-400 hover:text-slate-600">
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+            </div>
+
+            <p class="text-[11px] text-slate-500 leading-relaxed font-medium">
+                Besoin d'aide pour votre inscription ou des questions sur les filières ? Contactez-nous en 1 clic :
+            </p>
+
+            <div class="space-y-2 text-xs font-bold">
+                <!-- WhatsApp -->
+                <a href="https://wa.me/23566280000?text=Bonjour%20la%20Scolarit%C3%A9%20UNEK,%20je%20souhaite%20des%20informations%20sur%20les%20inscriptions." target="_blank" class="w-full py-2.5 px-3.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 transition flex items-center justify-between">
+                    <span class="flex items-center gap-2">
+                        <i class="fa-brands fa-whatsapp text-base text-emerald-600"></i> WhatsApp Scolarité
+                    </span>
+                    <i class="fa-solid fa-arrow-right text-[10px] text-emerald-600"></i>
+                </a>
+
+                <!-- Phone -->
+                <a href="tel:+23566280000" class="w-full py-2.5 px-3.5 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-800 border border-slate-200 transition flex items-center justify-between">
+                    <span class="flex items-center gap-2">
+                        <i class="fa-solid fa-phone text-amber-500"></i> Appeler le Secrétariat
+                    </span>
+                    <i class="fa-solid fa-arrow-right text-[10px] text-slate-400"></i>
+                </a>
+
+                <!-- Email -->
+                <a href="mailto:contact@unek-tchad.org" class="w-full py-2.5 px-3.5 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-800 border border-slate-200 transition flex items-center justify-between">
+                    <span class="flex items-center gap-2">
+                        <i class="fa-regular fa-envelope text-sky-500"></i> Envoyer un Mail
+                    </span>
+                    <i class="fa-solid fa-arrow-right text-[10px] text-slate-400"></i>
+                </a>
+
+                <!-- Admission Quick Link -->
+                <a href="{{ route('admissions') }}" class="w-full py-2.5 px-3.5 rounded-xl bg-[#0F172A] hover:bg-slate-800 text-white transition flex items-center justify-between shadow-md">
+                    <span class="flex items-center gap-2">
+                        <i class="fa-solid fa-pen-to-square text-amber-400"></i> Formulaire Candidature
+                    </span>
+                    <i class="fa-solid fa-arrow-right text-[10px] text-amber-400"></i>
+                </a>
+            </div>
+
+        </div>
+
+        <!-- Floating Button Trigger -->
+        <button @click="supportOpen = !supportOpen" 
+                class="w-14 h-14 rounded-full bg-gradient-to-tr from-amber-500 via-amber-400 to-amber-300 text-slate-950 shadow-2xl flex items-center justify-center text-xl font-bold ring-4 ring-white hover:scale-105 transition transform shadow-amber-500/40">
+            <i class="fa-solid text-xl" :class="supportOpen ? 'fa-xmark' : 'fa-headset'"></i>
+        </button>
+    </div>
+
 </body>
 </html>
 
