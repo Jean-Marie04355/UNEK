@@ -33,9 +33,9 @@ class AdmissionController extends Controller
             'cycle' => 'required|string|max:100',
             'faculte' => 'required|string|max:255',
             'filiere' => 'required|string|max:255',
-            'bac_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
-            'cni_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
-            'photo_file' => 'nullable|file|mimes:jpg,jpeg,png|max:5120',
+            'bac_file' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
+            'cni_file' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
+            'photo_file' => 'required|file|mimes:jpg,jpeg,png|max:5120',
         ]);
 
         // Upload des fichiers

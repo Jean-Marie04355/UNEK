@@ -52,10 +52,8 @@
         <aside class="w-full lg:w-64 bg-[#09101E] text-slate-300 shrink-0 border-r border-slate-800/80 flex flex-col justify-between shadow-2xl">
             <div>
                 <!-- Brand Header -->
-                <div class="h-20 flex items-center px-6 border-b border-slate-800/80 gap-3.5 bg-slate-950/40">
-                    <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-amber-400 via-amber-500 to-amber-600 text-slate-950 font-black flex items-center justify-center text-xl shadow-lg ring-2 ring-amber-400/20">
-                        <i class="fa-solid fa-graduation-cap"></i>
-                    </div>
+                <div class="h-20 flex items-center px-6 border-b border-slate-800/80 gap-3 bg-slate-950/40">
+                    <img src="{{ asset('images/logo-unek.png') }}" alt="Logo UNEK" class="h-10 w-auto object-contain">
                     <div>
                         <div class="font-['Outfit'] font-extrabold text-lg text-white tracking-tight flex items-center gap-1.5">
                             UNEK <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-amber-400/20 text-amber-300 border border-amber-400/30">PRO</span>

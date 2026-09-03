@@ -256,35 +256,44 @@
                             <i class="fa-solid fa-upload"></i>
                         </div>
                         <div>
-                            <h3 class="font-['Outfit'] font-bold text-xl text-slate-900">Étape 3 : Documents Justificatifs</h3>
-                            <p class="text-xs text-slate-500">Téléversez vos pièces (PDF ou Image JPG/PNG)</p>
+                            <h3 class="font-['Outfit'] font-bold text-xl text-slate-900">Étape 3 : Documents Justificatifs <span class="text-rose-600 font-extrabold text-sm">* (Obligatoires)</span></h3>
+                            <p class="text-xs text-slate-500">Téléversez vos 3 pièces obligatoires (PDF ou Image JPG/PNG) pour soumettre votre dossier</p>
                         </div>
+                    </div>
+
+                    <!-- Notice Alert -->
+                    <div class="mb-6 p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs font-bold flex items-center gap-2">
+                        <i class="fa-solid fa-triangle-exclamation text-amber-600 text-base"></i>
+                        <span>Attention : Les 3 pièces justificatives ci-dessous sont <strong>strictement obligatoires (*)</strong> pour pouvoir soumettre votre candidature.</span>
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-5 text-xs">
                         
                         <!-- File 1: Bac -->
-                        <div class="p-4 rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 text-center hover:border-amber-400 transition">
-                            <i class="fa-solid fa-file-pdf text-3xl text-rose-500 mb-2"></i>
-                            <h4 class="font-bold text-slate-800">Attestation du Baccalauréat</h4>
+                        <div class="p-4 rounded-2xl border-2 border-dashed border-rose-300 bg-rose-50/30 text-center hover:border-rose-500 transition relative">
+                            <span class="absolute top-2 right-2 px-2 py-0.5 rounded bg-rose-600 text-white font-extrabold text-[9px] uppercase">Obligatoire *</span>
+                            <i class="fa-solid fa-file-pdf text-3xl text-rose-500 mb-2 mt-2"></i>
+                            <h4 class="font-bold text-slate-800">Attestation du Baccalauréat *</h4>
                             <p class="text-[11px] text-slate-400 mt-1">Scan du diplôme ou relevé de notes</p>
-                            <input type="file" name="bac_file" accept=".pdf,.jpg,.jpeg,.png" class="mt-3 text-xs w-full">
+                            <input type="file" name="bac_file" required accept=".pdf,.jpg,.jpeg,.png" class="mt-3 text-xs w-full font-bold text-slate-700">
                         </div>
 
                         <!-- File 2: CNI -->
-                        <div class="p-4 rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 text-center hover:border-amber-400 transition">
-                            <i class="fa-solid fa-address-card text-3xl text-amber-500 mb-2"></i>
-                            <h4 class="font-bold text-slate-800">CNI ou Passeport</h4>
+                        <div class="p-4 rounded-2xl border-2 border-dashed border-amber-300 bg-amber-50/30 text-center hover:border-amber-500 transition relative">
+                            <span class="absolute top-2 right-2 px-2 py-0.5 rounded bg-rose-600 text-white font-extrabold text-[9px] uppercase">Obligatoire *</span>
+                            <i class="fa-solid fa-address-card text-3xl text-amber-500 mb-2 mt-2"></i>
+                            <h4 class="font-bold text-slate-800">CNI ou Passeport *</h4>
                             <p class="text-[11px] text-slate-400 mt-1">Copie lisible du document</p>
-                            <input type="file" name="cni_file" accept=".pdf,.jpg,.jpeg,.png" class="mt-3 text-xs w-full">
+                            <input type="file" name="cni_file" required accept=".pdf,.jpg,.jpeg,.png" class="mt-3 text-xs w-full font-bold text-slate-700">
                         </div>
 
                         <!-- File 3: Photo -->
-                        <div class="p-4 rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 text-center hover:border-amber-400 transition">
-                            <i class="fa-solid fa-image text-3xl text-emerald-500 mb-2"></i>
-                            <h4 class="font-bold text-slate-800">Photo d'Identité Récente</h4>
+                        <div class="p-4 rounded-2xl border-2 border-dashed border-emerald-300 bg-emerald-50/30 text-center hover:border-emerald-500 transition relative">
+                            <span class="absolute top-2 right-2 px-2 py-0.5 rounded bg-rose-600 text-white font-extrabold text-[9px] uppercase">Obligatoire *</span>
+                            <i class="fa-solid fa-image text-3xl text-emerald-500 mb-2 mt-2"></i>
+                            <h4 class="font-bold text-slate-800">Photo d'Identité Récente *</h4>
                             <p class="text-[11px] text-slate-400 mt-1">Format passeport fond clair</p>
-                            <input type="file" name="photo_file" accept=".jpg,.jpeg,.png" class="mt-3 text-xs w-full">
+                            <input type="file" name="photo_file" required accept=".jpg,.jpeg,.png" class="mt-3 text-xs w-full font-bold text-slate-700">
                         </div>
 
                     </div>

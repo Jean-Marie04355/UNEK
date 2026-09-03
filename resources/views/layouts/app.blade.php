@@ -42,23 +42,18 @@
             <div class="flex items-center justify-between h-20">
                 
                 <!-- Logo Officiel UNEK -->
-                <a href="{{ route('home') }}" class="flex items-center gap-3 group">
-                    <div class="w-11 h-11 rounded-xl bg-[#0F172A] flex items-center justify-center shadow-md ring-1 ring-slate-900/10 group-hover:scale-105 transition transform">
-                        <i class="fa-solid fa-graduation-cap text-amber-400 text-xl"></i>
-                    </div>
+                <a href="{{ route('home') }}" class="flex items-center gap-3.5 group">
+                    <img src="{{ asset('images/logo-unek.png') }}" alt="Logo Officiel Université Emi Koussi (UNEK)" class="h-12 w-auto object-contain group-hover:scale-105 transition transform">
                     <div>
-                        <div class="font-['Outfit'] font-extrabold text-xl sm:text-2xl tracking-tight text-slate-900 flex items-center gap-1.5 leading-none">
+                        <div class="font-['Outfit'] font-black text-xl sm:text-2xl tracking-tight text-slate-900 flex items-center gap-1.5 leading-none">
                             UNEK <span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-700 border border-amber-500/20">LMD</span>
                         </div>
-                        <p class="text-[10px] text-slate-500 font-semibold tracking-wider uppercase mt-1">Université Emi Koussi</p>
+                        <p class="text-[10px] text-slate-500 font-bold tracking-wider uppercase mt-1">Université Emi Koussi</p>
                     </div>
                 </a>
 
-                <!-- Navigation Desktop Épurée -->
+                <!-- Navigation Desktop Épurée (Logo = Accueil) -->
                 <nav class="hidden lg:flex items-center space-x-1 font-medium text-sm">
-                    <a href="{{ route('home') }}" class="px-3.5 py-2 rounded-lg transition {{ request()->routeIs('home') ? 'text-[#0F172A] font-bold bg-slate-100' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
-                        Accueil
-                    </a>
                     <a href="{{ route('universite') }}" class="px-3.5 py-2 rounded-lg transition {{ request()->routeIs('universite') ? 'text-[#0F172A] font-bold bg-slate-100' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50' }}">
                         L'Université
                     </a>
