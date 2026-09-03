@@ -133,13 +133,12 @@
                         <span class="font-['Outfit'] font-extrabold text-2xl text-white">UNEK</span>
                     </div>
                     <p class="text-xs text-slate-400 leading-relaxed">
-                        L'Université Emi Koussi (UNEK) est un établissement d'enseignement supérieur d'excellence à N'Djamena. Diplômes reconnus, corps professoral hautement qualifié et équipements modernes.
+                        L'Université Emi Koussi (UNEK) est un établissement d'enseignement supérieur d'excellence au Tchad. Diplômes reconnus LMD, corps professoral hautement qualifié et équipements de pointe.
                     </p>
-                    <div class="flex items-center gap-3 text-slate-400">
-                        <a href="#" class="w-8 h-8 rounded-full bg-slate-800 hover:bg-amber-400 hover:text-slate-950 flex items-center justify-center transition"><i class="fa-brands fa-facebook-f text-xs"></i></a>
-                        <a href="#" class="w-8 h-8 rounded-full bg-slate-800 hover:bg-amber-400 hover:text-slate-950 flex items-center justify-center transition"><i class="fa-brands fa-linkedin-in text-xs"></i></a>
-                        <a href="#" class="w-8 h-8 rounded-full bg-slate-800 hover:bg-amber-400 hover:text-slate-950 flex items-center justify-center transition"><i class="fa-brands fa-whatsapp text-xs"></i></a>
-                        <a href="#" class="w-8 h-8 rounded-full bg-slate-800 hover:bg-amber-400 hover:text-slate-950 flex items-center justify-center transition"><i class="fa-brands fa-youtube text-xs"></i></a>
+                    <div class="pt-1">
+                        <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-amber-400/10 border border-amber-400/20 text-amber-300 font-bold text-[11px]">
+                            <i class="fa-solid fa-shield-halved text-amber-400"></i> Université d'Excellence au Tchad
+                        </span>
                     </div>
                 </div>
 
