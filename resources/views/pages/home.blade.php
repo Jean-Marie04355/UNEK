@@ -171,7 +171,7 @@
                 Explorez nos 2 Facultés & 35 Filières d'Avenir
             </h2>
             <p class="text-slate-300 text-sm mt-3 font-light">
-                Choisissez la Faculté de votre choix pour découvrir la liste complète des spécialités ouvertes pour la rentrée 2026-2027.
+                Choisissez la faculté de votre choix pour découvrir la liste complète des spécialités ouvertes pour la rentrée scolaire.
             </p>
         </div>
 
@@ -330,8 +330,51 @@
     </div>
 </section>
 
-<!-- 6. VIE ÉTUDIANTE & PHOTOS RÉELLES DES ÉTUDIANTS UNEK -->
-<section class="py-20 bg-slate-50 border-t border-slate-200">
+<!-- 6. VIE ÉTUDIANTE & PHOTOS RÉELLES DES ÉTUDIANTS UNEK (AVEC LIGHTBOX MODAL INTERACTIF) -->
+<section class="py-20 bg-slate-50 border-t border-slate-200" x-data="{
+    lightboxOpen: false,
+    activeIdx: 0,
+    items: [
+        {
+            title: 'Étudiants en Salle de Cours',
+            badge: 'Cours Pratiques UNEK',
+            badgeClass: 'bg-amber-500/20 text-amber-300 border-amber-500/30',
+            image: '{{ asset('images/unek-etudiants-cours.png') }}',
+            description: 'Immersion au cœur des salles de cours et amphis de l\'Université Emi Koussi. Nos étudiants évoluent dans un cadre d\'apprentissage interactif avec des équipements multimédias et laboratoires informatiques de pointe.'
+        },
+        {
+            title: 'Rencontres avec les Experts',
+            badge: 'Conférences & Colloques',
+            badgeClass: 'bg-sky-500/20 text-sky-300 border-sky-500/30',
+            image: 'https://images.unsplash.com/photo-1475721027785-f74eccf877e2?q=80&w=1200&auto=format&fit=crop',
+            description: 'Colloques internationaux, conférences thématiques et présentations d\'experts académiques et professionnels. Un espace d\'échange scientifique privilégié pour élargir les horizons de nos futurs diplômés.'
+        },
+        {
+            title: 'Tournois Inter-filières',
+            badge: 'Activités Sportives',
+            badgeClass: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
+            image: 'https://images.unsplash.com/photo-1546519638-68e109498ffc?q=80&w=1200&auto=format&fit=crop',
+            description: 'Événements sportifs et compétitions universitaires organisés par le Bureau Des Étudiants (BDE). Le sport favorise la cohésion, l\'esprit d\'équipe et le bien-être sur l\'ensemble des campus de l\'UNEK.'
+        },
+        {
+            title: 'Remise des Diplômes LMD',
+            badge: 'Cérémonie Officielle UNEK',
+            badgeClass: 'bg-rose-500/20 text-rose-300 border-rose-500/30',
+            image: '{{ asset('images/unek-remise-diplomes.jpg') }}',
+            description: 'La célébration solennelle de la réussite académique de nos diplômés en Licence et Master, en présence des familles, du corps professoral et des autorités ministérielles de la République du Tchad.'
+        }
+    ],
+    openModal(index) {
+        this.activeIdx = index;
+        this.lightboxOpen = true;
+    },
+    next() {
+        this.activeIdx = (this.activeIdx + 1) % this.items.length;
+    },
+    prev() {
+        this.activeIdx = (this.activeIdx - 1 + this.items.length) % this.items.length;
+    }
+}" @keydown.escape.window="lightboxOpen = false">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <div class="text-center max-w-3xl mx-auto mb-16">
@@ -342,48 +385,88 @@
                 La Vie Étudiante au Cœur du Campus UNEK
             </h2>
             <p class="text-slate-600 text-sm sm:text-base mt-3">
-                Au-delà des cours académiques, l'UNEK offre un environnement dynamique porté par le Bureau Des Étudiants (BDE), des clubs scientifiques et des soutenances officielles.
+                Au-delà des cours académiques, l'UNEK offre un environnement dynamique porté par le Bureau Des Étudiants (BDE), des clubs scientifiques et des soutenances officielles. <span class="text-amber-600 font-semibold">(Cliquez sur une image pour l'agrandir)</span>
             </p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <!-- Item 1 -->
-            <div class="rounded-2xl overflow-hidden shadow-md group relative">
-                <img src="{{ asset('images/unek-etudiants-cours.png') }}" alt="Étudiants UNEK en salle de cours" class="w-full h-64 object-cover group-hover:scale-105 transition duration-500">
-                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent p-6 flex flex-col justify-end">
-                    <span class="text-xs font-bold text-amber-400 uppercase tracking-wider">Cours Pratiques UNEK</span>
-                    <h3 class="font-['Outfit'] font-bold text-lg text-white mt-1">Étudiants en Salle de Cours</h3>
+            <template x-for="(item, index) in items" :key="index">
+                <div @click="openModal(index)"
+                     class="rounded-2xl overflow-hidden shadow-md hover:shadow-xl group relative cursor-pointer transform hover:-translate-y-1 transition duration-300 border border-slate-200/80">
+                    <img :src="item.image" :alt="item.title" class="w-full h-64 object-cover group-hover:scale-110 transition duration-700">
+                    
+                    <!-- Overlay indicator on hover -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/50 to-slate-950/10 p-6 flex flex-col justify-between transition duration-300">
+                        <div class="flex justify-end opacity-0 group-hover:opacity-100 transition duration-300">
+                            <span class="bg-amber-400 text-slate-950 text-[11px] font-extrabold px-3 py-1 rounded-full shadow-md flex items-center gap-1.5">
+                                <i class="fa-solid fa-expand"></i> Aperçu
+                            </span>
+                        </div>
+                        <div>
+                            <span class="text-xs font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full border backdrop-blur-sm" :class="item.badgeClass" x-text="item.badge"></span>
+                            <h3 class="font-['Outfit'] font-bold text-lg text-white mt-2 group-hover:text-amber-300 transition" x-text="item.title"></h3>
+                            <p class="text-[11px] text-slate-300 mt-1 line-clamp-1 opacity-90"><i class="fa-solid fa-circle-info text-amber-400 mr-1"></i> Cliquer pour agrandir</p>
+                        </div>
+                    </div>
                 </div>
-            </div>
-
-            <!-- Item 2 -->
-            <div class="rounded-2xl overflow-hidden shadow-md group relative">
-                <img src="https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=800&auto=format&fit=crop" alt="Conférences et soutenance UNEK" class="w-full h-64 object-cover group-hover:scale-105 transition duration-500">
-                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent p-6 flex flex-col justify-end">
-                    <span class="text-xs font-bold text-sky-400 uppercase tracking-wider">Conférences & Colloques</span>
-                    <h3 class="font-['Outfit'] font-bold text-lg text-white mt-1">Rencontres avec les Experts</h3>
-                </div>
-            </div>
-
-            <!-- Item 3 -->
-            <div class="rounded-2xl overflow-hidden shadow-md group relative">
-                <img src="https://images.unsplash.com/photo-1546519638-68e109498ffc?q=80&w=800&auto=format&fit=crop" alt="Sports UNEK" class="w-full h-64 object-cover group-hover:scale-105 transition duration-500">
-                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent p-6 flex flex-col justify-end">
-                    <span class="text-xs font-bold text-emerald-400 uppercase tracking-wider">Activités Sportives</span>
-                    <h3 class="font-['Outfit'] font-bold text-lg text-white mt-1">Tournois Inter-filières</h3>
-                </div>
-            </div>
-
-            <!-- Item 4 -->
-            <div class="rounded-2xl overflow-hidden shadow-md group relative">
-                <img src="{{ asset('images/unek-remise-diplomes.jpg') }}" alt="Cérémonie Officielle de Remise des Diplômes UNEK" class="w-full h-64 object-cover group-hover:scale-105 transition duration-500">
-                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent p-6 flex flex-col justify-end">
-                    <span class="text-xs font-bold text-rose-400 uppercase tracking-wider">Cérémonie Officielle UNEK</span>
-                    <h3 class="font-['Outfit'] font-bold text-lg text-white mt-1">Remise des Diplômes LMD</h3>
-                </div>
-            </div>
+            </template>
         </div>
 
+    </div>
+
+    <!-- MODAL LIGHTBOX APERÇU D'IMAGE EN PLEIN ÉCRAN -->
+    <div x-show="lightboxOpen"
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100"
+         x-transition:leave="transition ease-in duration-200"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0"
+         class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-slate-950/85 backdrop-blur-md"
+         style="display: none;">
+        
+        <div @click.away="lightboxOpen = false"
+             class="relative bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl max-w-4xl w-full flex flex-col max-h-[90vh]">
+            
+            <!-- Modal Header -->
+            <div class="flex items-center justify-between px-6 py-4 border-b border-slate-800 bg-slate-950/80">
+                <div class="flex items-center gap-3">
+                    <span class="text-xs font-extrabold uppercase tracking-wider px-3 py-1 rounded-full border"
+                          :class="items[activeIdx]?.badgeClass"
+                          x-text="items[activeIdx]?.badge"></span>
+                    <span class="text-xs font-bold text-slate-400 font-mono" x-text="`${activeIdx + 1} / ${items.length}`"></span>
+                </div>
+                <button @click="lightboxOpen = false" class="w-9 h-9 rounded-full bg-slate-800 hover:bg-rose-600 text-slate-300 hover:text-white transition flex items-center justify-center font-bold text-sm">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Modal Image Body -->
+            <div class="relative bg-slate-950 flex items-center justify-center overflow-hidden min-h-[300px] sm:min-h-[420px]">
+                <img :src="items[activeIdx]?.image" :alt="items[activeIdx]?.title" class="max-h-[60vh] w-auto max-w-full object-contain mx-auto transition duration-300">
+                
+                <!-- Prev / Next Navigation Buttons -->
+                <button @click="prev()" class="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-slate-900/80 hover:bg-amber-400 text-white hover:text-slate-950 border border-slate-700 transition flex items-center justify-center text-base shadow-lg">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </button>
+                <button @click="next()" class="absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-slate-900/80 hover:bg-amber-400 text-white hover:text-slate-950 border border-slate-700 transition flex items-center justify-center text-base shadow-lg">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </button>
+            </div>
+
+            <!-- Modal Footer Description -->
+            <div class="p-6 bg-slate-900 border-t border-slate-800">
+                <h3 class="font-['Outfit'] font-extrabold text-xl text-white mb-2" x-text="items[activeIdx]?.title"></h3>
+                <p class="text-slate-300 text-xs sm:text-sm leading-relaxed" x-text="items[activeIdx]?.description"></p>
+                <div class="mt-4 flex justify-between items-center pt-3 border-t border-slate-800/80 text-xs text-slate-400">
+                    <span><i class="fa-solid fa-building-columns text-amber-400 mr-1.5"></i> Campus UNEK N'Djamena</span>
+                    <button @click="lightboxOpen = false" class="px-4 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs transition">
+                        Fermer l'Aperçu
+                    </button>
+                </div>
+            </div>
+
+        </div>
     </div>
 </section>
 
