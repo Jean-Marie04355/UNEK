@@ -49,7 +49,7 @@
         <div class="bg-white rounded-3xl p-8 shadow-xl border border-slate-200">
             <div class="text-center max-w-xl mx-auto mb-10">
                 <h2 class="font-['Outfit'] text-2xl sm:text-3xl font-extrabold text-slate-900">
-                    Simulateur Interactif de Scolarité
+                    Frais de Scolarité
                 </h2>
                 <p class="text-xs sm:text-sm text-slate-500 mt-2">
                     Sélectionnez le cycle d'études et le pôle académique pour calculer l'échéancier des paiements.
