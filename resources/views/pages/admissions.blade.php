@@ -146,8 +146,8 @@
                         </div>
 
                         <div class="sm:col-span-2">
-                            <label class="block font-bold text-slate-700 mb-1">Ville & Quartier de Résidence</label>
-                            <input type="text" name="adresse" placeholder="Quartier Moursal, N'Djamena" class="w-full p-3 rounded-xl border border-slate-300 focus:border-amber-400 focus:outline-none">
+                            <label class="block font-bold text-slate-700 mb-1">Ville & Quartier de Résidence *</label>
+                            <input type="text" name="adresse" required placeholder="Quartier Moursal, N'Djamena" class="w-full p-3 rounded-xl border border-slate-300 focus:border-amber-400 focus:outline-none">
                         </div>
                     </div>
 

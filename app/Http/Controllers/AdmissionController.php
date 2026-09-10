@@ -29,7 +29,7 @@ class AdmissionController extends Controller
             'nationalite' => 'required|string|max:255',
             'telephone' => 'required|string|max:50',
             'email' => 'required|email|max:255',
-            'adresse' => 'nullable|string|max:255',
+            'adresse' => 'required|string|max:255',
             'cycle' => 'required|string|max:100',
             'faculte' => 'required|string|max:255',
             'filiere' => 'required|string|max:255',
